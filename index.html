@@ -716,7 +716,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v7</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v8</p>
   </form>
 </div>
 
@@ -3233,7 +3233,17 @@ function authSubmit(){
     if(pseudo.length<2)return bad("Choisis un pseudo de 2 caractères minimum.");
     var meta={pseudo:pseudo,age:String(state.me.age||""),bio:state.me.bio||"",veut:state.me.veut||"",games:state.me.games||[],cherche:state.me.cherche||[],photo:state.me.photo||""};
     sb.auth.signUp({email:email,password:pass},{data:meta}).then(function(res){
-      if(res.error)return bad(prettyAuthErr(res.error));
+      if(res.error){
+        if(/already registered/i.test(String(res.error.message||res.error))){
+          authSetMode(false);
+          $("#auth-email").value=email;
+          $("#auth-pass").value="";
+          err.textContent="Ce compte existe déjà : mets ton mot de passe ici, puis appuie sur Se connecter.";
+          err.hidden=false;$("#auth-pass").focus();
+          return;
+        }
+        return bad(prettyAuthErr(res.error));
+      }
       if(!res.data.session){err.textContent="Compte créé ! Vérifie ta boîte mail et clique le lien de confirmation.";err.hidden=false;return;}
       closeAuth();toast("Bienvenue "+pseudo+" !");
     });
@@ -3263,7 +3273,7 @@ applyTheme(state.theme);
 render();
 sbInit();
 try{$("#auth-form").addEventListener("submit",function(e){e.preventDefault();authSubmit();});}catch(e){}
-try{$("#auth-form").addEventListener("click",function(e){var el=e.target.closest("[data-action='auth-mode']");if(el)authSetMode(!authModeSignup);});}catch(e){}
+try{$("#auth-form").addEventListener("click",function(e){var el=e.target.closest("[data-action='auth-mode']");if(el){authSetMode(!authModeSignup);toast(authModeSignup?"Mode création de compte":"Mode connexion : ton e-mail puis ton mot de passe");}});}catch(e){}
 })();
 </script>
 
