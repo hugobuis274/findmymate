@@ -23,6 +23,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FindMyMate : trouve tes mates pour jouer">
 <meta name="twitter:description" content="Trouve des joueurs de Fortnite, Warzone, Valorant et Minecraft : choisis ton jeu et ton rang, regarde leurs clips, envoie un DM.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -264,6 +265,9 @@ input::placeholder,textarea::placeholder{color:var(--encre-faible)}
 .gform{margin-bottom:1.5rem}
 .gform .field.wide{grid-column:1/-1}
 .err{color:var(--alerte);font-size:.9rem}
+.linklike{padding:0;border:0;background:transparent;font:inherit;font-weight:700;color:var(--or-fonce);text-decoration:underline;cursor:pointer}
+#auth .field{margin-top:.9rem}
+#auth .sheet{max-height:calc(100dvh - 4rem);overflow-y:auto}
 .grp{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.85rem 1.75rem;align-items:center;padding:1.6rem 1.75rem}
 .grp h3{font-size:1.15rem;margin-bottom:.35rem}
 .grp .g-desc{color:var(--encre-douce);font-size:.95rem}
@@ -652,6 +656,10 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <span class="badge" id="badge-me" hidden><span id="badge-n">0</span><span class="sr"> messages non lus</span></span>
     </button>
     <nav class="menu-panel" id="menu-panel" aria-label="Menu principal">
+      <button type="button" class="menu-item menu-parent" id="mi-account" data-action="account">
+        <span class="mi-title" id="mi-account-title">Se connecter</span>
+        <span class="mi-desc" id="mi-account-desc">Crée un compte gratuit pour écrire aux joueurs inscrits</span>
+      </button>
       <a class="menu-item" href="#accueil" data-route="accueil" data-page="accueil"><span class="mi-title">Accueil</span><span class="mi-desc">Les explications pour bien démarrer</span></a>
       <a class="menu-item" href="#profil" data-route="profil" data-page="profil"><span class="mi-title">Mon profil</span><span class="mi-desc">Ta bio, tes jeux, ton rang, tes clips</span></a>
       <a class="menu-item" href="#recherche" data-route="recherche" data-page="recherche"><span class="mi-title">Rechercher des joueurs</span><span class="mi-desc">Filtre par jeu et par rang</span></a>
@@ -676,6 +684,37 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
 </header>
 
 <main id="app"></main>
+
+<div class="overlay" id="auth" hidden>
+  <form class="sheet" id="auth-form" role="dialog" aria-modal="true" aria-labelledby="auth-title" novalidate>
+    <div class="sheet-head">
+      <div>
+        <h2 id="auth-title">Créer ton compte</h2>
+        <p class="note" id="auth-sub">Gratuit. Pseudo, e-mail, mot de passe.</p>
+      </div>
+      <button type="button" class="icon-btn" data-action="auth-close" aria-label="Fermer">×</button>
+    </div>
+    <div class="field" id="auth-pseudo-field">
+      <label for="auth-pseudo">Ton pseudo</label>
+      <input id="auth-pseudo" maxlength="24" autocomplete="nickname" placeholder="Ex. Sniper_du_13">
+    </div>
+    <div class="field">
+      <label for="auth-email">E-mail</label>
+      <input id="auth-email" type="email" autocomplete="email" placeholder="toi@exemple.fr">
+    </div>
+    <div class="field">
+      <label for="auth-pass">Mot de passe (6 caractères minimum)</label>
+      <input id="auth-pass" type="password" maxlength="72" autocomplete="current-password">
+    </div>
+    <p class="err" id="auth-err" role="alert" hidden></p>
+    <p class="note" id="auth-switch">Tu as déjà un compte ? <button type="button" class="linklike" data-action="auth-mode">Me connecter</button></p>
+    <p class="note">Tes messages partent sur un serveur sécurisé, et seulement les joueurs à qui tu écris les lisent. Aucune donnée n'est revendue.</p>
+    <div class="sheet-actions">
+      <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
+      <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
+    </div>
+  </form>
+</div>
 
 <div class="overlay" id="dm" hidden>
   <form class="sheet" id="dm-form" role="dialog" aria-modal="true" aria-labelledby="dm-title" novalidate>
@@ -751,6 +790,22 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
 (function(){
 "use strict";
 
+/* ---------- compte en ligne (Supabase) ---------- */
+var SUPA_URL="https://hhqptroimcmjvyddqrtw.supabase.co";
+var SUPA_KEY="sb_publishable_p-KzoY6KWL27dLnRjiunyg_A3ZCEptt";
+var sb=null;
+var acct={user:null,row:null,ch:null,tries:0};
+var REALBY={};
+function realFromRow(r){
+  var games=Array.isArray(r.games)?r.games.filter(function(x){return x&&G[x.g]&&G[x.g].ranks.indexOf(x.r)>=0;}):[];
+  return {id:r.id,name:String(r.pseudo||"Joueur"),age:String(r.age==null?"":r.age),bio:String(r.bio||""),games:games,
+    cherche:Array.isArray(r.cherche)?r.cherche.filter(function(c){return CHERCHE.indexOf(c)>=0;}):[],
+    veut:String(r.veut||""),dispo:String(r.dispo||""),
+    photo:(typeof r.photo==="string"&&r.photo.indexOf("data:image/")===0&&r.photo.length<400000)?r.photo:"",
+    online:r.online===true,real:true,pro:false,ptheme:""};
+}
+function realList(){var out=[];Object.keys(REALBY).forEach(function(id){if(acct.user&&id===acct.user.id)return;out.push(REALBY[id]);});return out;}
+
 /* ---------- données ---------- */
 var GAMES=[
   {id:"valorant",name:"Valorant",ranks:["Fer","Bronze","Argent","Or","Platine","Diamant","Ascendant","Immortel","Radiant"]},
@@ -812,7 +867,7 @@ function plural(n,w){return n+" "+w+(n>1?"s":"");}
 function isNarrow(){try{return window.matchMedia("(max-width:760px)").matches;}catch(e){return false;}}
 function fmtTime(t){var d=new Date(t),n=new Date();try{return d.toDateString()===n.toDateString()?d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}):d.toLocaleDateString("fr-FR",{day:"numeric",month:"short"});}catch(e){return "";}}
 function nowHM(){try{return new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});}catch(e){return "";}}
-function playerById(id){return PLAYERS.find(function(p){return p.id===id;});}
+function playerById(id){var p=PLAYERS.find(function(p){return p.id===id;});return p?p:(REALBY[id]||null);}
 function showErr(id,msg){var e=$("#"+id);if(e){e.textContent=msg;e.hidden=false;}}
 function hideErr(id){var e=$("#"+id);if(e)e.hidden=true;}
 function setStatus(id,msg){var e=$("#"+id);if(e)e.textContent=msg;}
@@ -1594,7 +1649,7 @@ function load(){
   return d;
 }
 var state=load();
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}try{queueSyncProfile();}catch(e){}}
 
 /* vidéos ajoutées par le joueur : stockées dans le navigateur (IndexedDB) */
 function idb(){
@@ -1811,7 +1866,7 @@ function renderSearch(){
      +'<div class="panel-foot"><button type="button" class="btn ghost" data-action="f-reset">Réinitialiser</button><button type="submit" class="btn primary">Valider les filtres</button></div>'
    +'</form>'
    +'<div class="active" id="active" aria-label="Filtres actifs"></div>'
-   +'<div class="meta-line"><span id="s-count" aria-live="polite"></span><span>Joueurs d\'exemple pour tester le site.</span></div>'
+   +'<div class="meta-line"><span id="s-count" aria-live="polite"></span><span id="s-src">Joueurs d\'exemple pour tester le site.</span></div>'
    +'<div class="list" id="results"></div>'
    +'</section>';
   $("#q").value=f.q;$("#f-amin").value=f.ageMin;$("#f-amax").value=f.ageMax;
@@ -1842,7 +1897,7 @@ function renderActive(){
   }
   $("#active").innerHTML=h;
 }
-function listPlayers(){var l=PLAYERS.slice();if(state.me.online&&state.me.pseudo.trim())l.unshift(meAsPlayer());return l;}
+function listPlayers(){var l=realList().concat(PLAYERS);if(!acct.user&&state.me.online&&state.me.pseudo.trim())l.unshift(meAsPlayer());return l;}
 function renderResults(){
   var all=listPlayers(),list=all.filter(match);
   if(f.game){
@@ -1851,6 +1906,7 @@ function renderResults(){
     list.sort(function(a,b){return rk(b)-rk(a);});
   }
   $("#s-count").textContent=plural(list.length,"joueur")+(anyFilter()?" sur "+all.length:"");
+  var ssrc=$("#s-src");if(ssrc)ssrc.textContent=Object.keys(REALBY).length?"Joueurs inscrits + exemples pour tester.":"Joueurs d\'exemple pour tester le site.";
   $("#results").innerHTML=list.length
     ?list.map(function(p){return playerRow(p,{game:f.game});}).join("")
     :'<div class="empty"><h2>Aucun joueur ne correspond</h2><p class="sub">Élargis le rang, change de jeu ou retire un filtre.</p><button type="button" class="btn primary" data-action="f-reset">Réinitialiser les filtres</button></div>';
@@ -2018,9 +2074,13 @@ function threadAvatar(k,id,cls){
 }
 function threadNote(k,id){
   if(k==="groupes"){var g=groupInfo(id);if(g&&g.mine)return "Tu es le président · "+(g.access==="invitation"?"sur invitation":"ouvert à tous");var ge=GROUPS.find(function(x){return x.id===id;}),ch=ge&&playerById(ge.chef);return (ch?"Président : "+ch.name+" · ":"")+"groupe d'exemple, les autres membres ne répondent pas.";}
+  if(REALBY[id])return acct.user&&id===acct.user.id?"Ton profil":"Joueur inscrit : les réponses sont réelles.";
   return id==="sys"?"Messages de l'équipe":"Joueur d'exemple : il répond avec des messages automatiques.";
 }
-function markRead(id){if(state.unread[id]){delete state.unread[id];save();updateBadges();}}
+function markRead(id){
+  if(state.unread[id]){delete state.unread[id];save();updateBadges();}
+  if(acct.user&&sb&&id&&id.length===36){sb.from("messages").update({read:true}).match({sender_id:id,recipient_id:acct.user.id,read:false}).then(function(){});}
+}
 var lastMsgKind="";
 function renderMessages(){
   var k=kindOf(),ids=threadIds(k);
@@ -2075,7 +2135,7 @@ function renderFind(){
     foot='<a class="tfind-all" href="#groupes" data-route="groupes">Tous les groupes, ou créer le tien</a>';
   }else{
     if(!q){el.innerHTML='<h3>Écrire à un nouveau joueur</h3><p class="th-none">Tape un pseudo ou un jeu pour trouver un joueur.</p><a class="tfind-all" href="#recherche" data-route="recherche">Rechercher des joueurs</a>';return;}
-    var ps=PLAYERS.filter(function(p){return !state.threads[p.id]&&findMatch(p.name+" "+p.games.map(function(x){return G[x.g].name+" "+x.r;}).join(" "));}).slice(0,5);
+    var ps=listPlayers().filter(function(p){return !state.threads[p.id]&&findMatch(p.name+" "+p.games.map(function(x){return G[x.g].name+" "+x.r;}).join(" "));}).slice(0,5);
     title="Écrire à un nouveau joueur";
     rows=ps.map(function(p){var gm=p.games[0];
       return '<div class="frow"><strong>'+esc(p.name)+(p.pro?" "+proBadge():"")+'</strong><small>'+(gm?esc(G[gm.g].name+", "+gm.r+" · "):"")+p.age+' ans</small><div class="g-act"><button type="button" class="btn primary" data-action="dm" data-id="'+esc(p.id)+'" aria-label="Envoyer un DM à '+esc(p.name)+'">Envoyer un DM</button></div></div>';
@@ -2238,6 +2298,29 @@ function sendDM(){
   var t=$("#dm-text").value.trim(),err=$("#dm-err");
   if(!t){err.textContent="Écris un message avant d'envoyer.";err.hidden=false;$("#dm-text").focus();return;}
   var p=dmFor;
+  if(p&&p.real){
+    if(!acct.user){
+      closeDM();
+      err.textContent="";
+      openAuth(true);
+      toast("Crée un compte gratuit pour écrire à un joueur inscrit.");
+      return;
+    }
+    sb.from("messages").insert({sender_id:acct.user.id,recipient_id:p.id,body:t}).then(function(res){
+      if(res.error){err.textContent="Le message n'est pas parti : "+prettyAuthErr(res.error);err.hidden=false;return;}
+      err.hidden=true;
+      if(!state.threads[p.id])state.threads[p.id]=[];
+      state.threads[p.id].push({from:"me",text:t,t:Date.now()});
+      save();
+      dmOpener=null;
+      $("#dm").hidden=true;dmFor=null;
+      toast("Message envoyé à "+p.name);
+      if(route==="recherche")renderResults();
+      else if(route==="joueur")renderPlayer();
+      else if(route==="messages"&&$("#thread-list")){renderThreadList();renderFind();}
+    });
+    return;
+  }
   if(!state.threads[p.id])state.threads[p.id]=[];
   state.threads[p.id].push({from:"me",text:t,t:Date.now()});
   save();
@@ -2657,7 +2740,9 @@ function notifPerm(){
 }
 var REPLIES=["Salut ! Ouais carrément, tu es dispo quand ?","Pas de souci, on lance une game ce soir ?","Ça marche, ajoute-moi et on se cale ça.","Top, j'ai un créneau vers 21h si ça te va.","Avec plaisir ! Tu as un micro ?"];
 function scheduleReply(pid){
-  if(!pid||pid==="sys"||!playerById(pid))return;
+  if(!pid||pid==="sys"||pid.length===36||!playerById(pid))return;
+  if(!playerById(pid).real){}
+  else return;
   setTimeout(function(){
     var th=state.threads[pid];if(!th)return;
     var n=th.filter(function(m){return m.from==="them";}).length;
@@ -2700,6 +2785,9 @@ document.addEventListener("click",function(e){
   var act=el.dataset.action,v=el.dataset.v,id=el.dataset.id;
   switch(act){
     case "menu-toggle":setMenu(!menuOpen);break;
+    case "account":if(acct.user)signOutFlow();else{setMenu(false);openAuth(true);}break;
+    case "auth-mode":authSetMode(!authModeSignup);break;
+    case "auth-close":closeAuth();break;
     case "open-menu":setMenu(true);break;
     case "theme-set":setTheme(id);break;
     case "fx-toggle":{var fk=el.getAttribute("data-k");state.fx[fk]=!(state.fx[fk]!==false);save();
@@ -2975,9 +3063,9 @@ document.addEventListener("focusout",function(e){
 });
 document.addEventListener("keydown",function(e){
   if(menuOpen&&e.key==="Escape"){e.preventDefault();setMenu(false,{focus:true});return;}
-  var ov=!$("#voc").hidden?$("#voc"):(!$("#vid").hidden?$("#vid"):(!$("#buy").hidden?$("#buy"):(!$("#dm").hidden?$("#dm"):null)));
+  var ov=!$("#voc").hidden?$("#voc"):(!$("#vid").hidden?$("#vid"):(!$("#buy").hidden?$("#buy"):(!$("#dm").hidden?$("#dm"):(!$("#auth").hidden?$("#auth"):null))));
   if(!ov)return;
-  if(e.key==="Escape"){e.preventDefault();if(ov.id==="voc")vocMin();else if(ov.id==="vid")closeVideo();else if(ov.id==="buy")closeBuy();else closeDM();return;}
+  if(e.key==="Escape"){e.preventDefault();if(ov.id==="voc")vocMin();else if(ov.id==="vid")closeVideo();else if(ov.id==="buy")closeBuy();else if(ov.id==="auth")closeAuth();else closeDM();return;}
   if(e.key==="Tab"){
     var fs=Array.from(ov.querySelectorAll("button,textarea,input,select,video,[href]")).filter(function(x){return !x.disabled&&x.offsetParent!==null;});
     if(!fs.length)return;
@@ -2987,10 +3075,188 @@ document.addEventListener("keydown",function(e){
   }
 });
 
+/* ---------- moteur compte : connexion, profils, messages ---------- */
+function sbInit(){
+  if(acct.tries>50)return;
+  acct.tries++;
+  if(!(window.supabase&&window.supabase.createClient)){setTimeout(sbInit,120);return;}
+  try{sb=window.supabase.createClient(SUPA_URL,SUPA_KEY);}catch(e){return;}
+  sb.auth.getSession().then(function(r){
+    var s=r&&r.data?r.data.session:null;
+    acct.user=s?s.user:null;
+    renderAccountMenu();
+    if(acct.user)loadAccountStuff();
+  });
+  sb.auth.onAuthStateChange(function(evt,sess){
+    var u=sess&&sess.user?sess.user:null;
+    var old=acct.user?acct.user.id:null;
+    if((u?u.id:null)===(old?old:""))return;
+    acct.user=u;acct.row=null;
+    if(u)loadAccountStuff();else onSignedOut(old);
+    renderAccountMenu();
+  });
+}
+function onSignedOut(oldId){
+  if(acct.ch&&sb){try{sb.removeChannel(acct.ch);}catch(e){}}
+  acct.ch=null;
+  if(oldId)delete REALBY[oldId];
+  save();updateBadges();
+  if(route==="recherche"||route==="messages"||route==="joueur"||route==="profil")render();
+}
+function loadAccountStuff(){
+  var uid=acct.user.id;
+  sb.from("profiles").select("*").eq("id",uid).single().then(function(res){
+    if(res.error){
+      sb.from("profiles").upsert({id:uid,pseudo:(state.me.pseudo.trim()||("Joueur_"+uid.replace(/-/g,"").slice(0,6)))}).then(function(){loadAccountStuff();});
+      return;
+    }
+    acct.row=res.data;
+    if(acct.row){
+      if(!state.me.pseudo.trim())state.me.pseudo=acct.row.pseudo||"";
+      if(!state.me.bio.trim())state.me.bio=acct.row.bio||"";
+      if(!state.me.veut.trim())state.me.veut=acct.row.veut||"";
+      if(!state.me.photo&&acct.row.photo)state.me.photo=acct.row.photo;
+      if(!state.me.games.length&&Array.isArray(acct.row.games))state.me.games=acct.row.games.filter(function(x){return x&&G[x.g];});
+      REALBY[uid]=realFromRow(acct.row);
+      save();
+    }
+    sb.from("profiles").update({online:true}).eq("id",uid).then(function(){});
+    refreshRealProfiles();
+    loadMessagesOnce();
+    subscribeRealtime();
+  });
+}
+function refreshRealProfiles(){
+  sb.from("profiles").select("*").limit(500).then(function(r){
+    if(r.error)return;
+    (r.data||[]).forEach(function(row){REALBY[row.id]=realFromRow(row);});
+    if(route==="recherche"||route==="messages"||route==="joueur")render();
+  });
+}
+function loadMessagesOnce(){
+  var uid=acct.user.id;
+  sb.from("messages").select("*").or("sender_id.eq."+uid+",recipient_id.eq."+uid).order("created_at",{ascending:true}).limit(500).then(function(r){
+    if(r.error)return;
+    (r.data||[]).forEach(function(m){putDbMessage(m);});
+    save();updateBadges();
+    if(route==="messages"||route==="joueur")render();
+  });
+}
+function putDbMessage(m){
+  var uid=acct.user.id;
+  var mine=m.sender_id===uid;
+  var other=mine?m.recipient_id:m.sender_id;
+  if(!REALBY[other])REALBY[other]={id:other,name:"Joueur "+other.slice(0,6),real:true,age:"",bio:"",games:[],cherche:[],veut:"",dispo:"",photo:"",online:true,pro:false,ptheme:""};
+  if(!state.threads[other])state.threads[other]=[];
+  var th=state.threads[other],i;
+  for(i=0;i<th.length;i++){if(th[i].mid===m.id)return;}
+  if(mine){
+    for(i=th.length-1;i>=0;i--){
+      if(th[i].from==="me"&&!th[i].mid&&th[i].text===m.body){th[i].mid=m.id;save();return;}
+    }
+  }
+  th.push({from:mine?"me":"them",text:m.body,t:Date.parse(m.created_at)||Date.now(),mid:m.id});
+  if(!mine&&!m.read)state.unread[other]=true;
+  save();
+}
+function subscribeRealtime(){
+  if(acct.ch||!sb)return;
+  acct.ch=sb.channel("fmm-"+acct.user.id)
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},function(pl){
+      if(!pl||!pl.new)return;
+      var m=pl.new,mine=m.sender_id===acct.user.id;
+      putDbMessage(m);
+      updateBadges();
+      if(!mine){
+        var other=m.recipient_id,nm=(REALBY[other]||{}).name||"un joueur";
+        if(!state.unread[other])state.unread[other]=true;
+        save();
+        toast("Nouveau message de "+nm);
+        if(route==="messages"&&active.joueurs===other)renderThread();
+      }
+    })
+    .subscribe();
+}
+var syncT=null;
+function queueSyncProfile(){if(!acct.user||!sb)return;clearTimeout(syncT);syncT=setTimeout(syncProfileRow,900);}
+function syncProfileRow(){
+  if(!acct.user||!sb)return;
+  var m=state.me;
+  var row={id:acct.user.id,pseudo:(m.pseudo.trim()||"Joueur").slice(0,24),age:String(m.age||""),bio:m.bio||"",veut:m.veut||"",games:m.games||[],cherche:m.cherche||[],photo:(m.photo||"").slice(0,399999),online:true};
+  sb.from("profiles").upsert(row).then(function(res){
+    if(res.error)return;
+    acct.row=row;REALBY[acct.user.id]=realFromRow(row);
+    renderAccountMenu();
+  });
+}
+var authModeSignup=true;
+function openAuth(signup){
+  authModeSignup=signup!==false;
+  authSetMode();
+  var pe=$("#auth-pseudo");
+  if(!pe.value&&state.me.pseudo.trim())pe.value=state.me.pseudo.trim();
+  $("#auth-err").hidden=true;$("#auth-pass").value="";
+  $("#auth").hidden=false;
+  $(authModeSignup?"#auth-pseudo":"#auth-email").focus();
+}
+function closeAuth(){$("#auth").hidden=true;}
+function authSetMode(){
+  var s=authModeSignup;
+  $("#auth-title").textContent=s?"Créer ton compte":"Me connecter";
+  $("#auth-ok").textContent=s?"Créer mon compte":"Se connecter";
+  $("#auth-sub").textContent=s?"Gratuit. Pseudo, e-mail, mot de passe.":"Ton e-mail et ton mot de passe.";
+  $("#auth-pseudo-field").hidden=!s;
+  $("#auth-switch").innerHTML=s?"Tu as déjà un compte ? <button type=\"button\" class=\"linklike\" data-action=\"auth-mode\">Me connecter</button>":"Pas encore de compte ? <button type=\"button\" class=\"linklike\" data-action=\"auth-mode\">Créer un compte</button>";
+}
+function prettyAuthErr(e){
+  var m=String((e&&e.message)||e);
+  if(/already registered/i.test(m))return "Ce compte existe déjà. Essaie « Me connecter ».";
+  if(/invalid login credentials/i.test(m))return "E-mail ou mot de passe incorrect.";
+  if(/email not confirmed/i.test(m))return "Vérifie ta boîte mail : clique le lien de confirmation, puis connecte-toi.";
+  if(/anonymous|rate|too many|attempts/i.test(m))return "Trop d'essais. Attends une minute et réessaie.";
+  if(/database error/i.test(m))return "Impossible pour l'instant. Réessaie dans un instant.";
+  return m;
+}
+function authSubmit(){
+  var pseudo=($("#auth-pseudo").value||"").trim(),email=$("#auth-email").value.trim(),pass=$("#auth-pass").value,err=$("#auth-err");
+  function bad(m){err.textContent=m;err.hidden=false;}
+  if(!email||email.indexOf("@")<1)return bad("Mets une adresse e-mail valide.");
+  if(!pass||pass.length<6)return bad("Le mot de passe doit faire au moins 6 caractères.");
+  err.hidden=true;
+  if(authModeSignup){
+    if(pseudo.length<2)return bad("Choisis un pseudo de 2 caractères minimum.");
+    var meta={pseudo:pseudo,age:String(state.me.age||""),bio:state.me.bio||"",veut:state.me.veut||"",games:state.me.games||[],cherche:state.me.cherche||[],photo:state.me.photo||""};
+    sb.auth.signUp({email:email,password:pass},{data:meta}).then(function(res){
+      if(res.error)return bad(prettyAuthErr(res.error));
+      if(!res.data.session){err.textContent="Compte créé ! Vérifie ta boîte mail et clique le lien de confirmation.";err.hidden=false;return;}
+      closeAuth();toast("Bienvenue "+pseudo+" !");
+    });
+  }else{
+    sb.auth.signInWithPassword({email:email,password:pass}).then(function(res){
+      if(res.error)return bad(prettyAuthErr(res.error));
+      closeAuth();
+      var ps=(res.data.user&&res.data.user.user_metadata&&res.data.user.user_metadata.pseudo)||state.me.pseudo.trim();
+      toast("Content de te revoir"+(ps?", "+ps:"")+" !");
+    });
+  }
+}
+function signOutFlow(){
+  if(!sb||!acct.user)return;
+  sb.from("profiles").update({online:false}).eq("id",acct.user.id).then(function(){sb.auth.signOut();});
+}
+function renderAccountMenu(){
+  var t=$("#mi-account-title"),d=$("#mi-account-desc");
+  if(!t)return;
+  if(acct.user){t.textContent="Déconnexion";d.textContent="Connecté : "+(acct.row&&acct.row.pseudo?acct.row.pseudo:((acct.user.user_metadata&&acct.user.user_metadata.pseudo)||"ton compte"));}
+  else{t.textContent="Se connecter";d.textContent="Crée un compte gratuit pour écrire aux joueurs inscrits";}
+}
+
 try{Art.setStill(!state.fx.bg);}catch(e){}
 try{setFavicon();}catch(e){}
 applyTheme(state.theme);
 render();
+sbInit();
+try{$("#auth-form").addEventListener("submit",function(e){e.preventDefault();authSubmit();});}catch(e){}
 })();
 </script>
 
