@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hugobuis274.github.io/findmymate/sitemap.xml
