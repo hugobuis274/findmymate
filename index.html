@@ -704,7 +704,8 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
     </div>
     <div class="field">
       <label for="auth-pass">Mot de passe (6 caractères minimum)</label>
-      <input id="auth-pass" type="password" maxlength="72" autocomplete="current-password">
+      <input id="auth-pass" type="password" maxlength="72" autocomplete="current-password" style="padding-right:5.5rem">
+      <button type="button" class="linklike" id="auth-eye" data-action="auth-eye" style="align-self:flex-start">Afficher le mot de passe</button>
     </div>
     <p class="err" id="auth-err" role="alert" hidden></p>
     <p class="note" id="auth-switch">Tu as déjà un compte ? <button type="button" class="linklike" data-action="auth-mode">Me connecter</button></p>
@@ -1840,7 +1841,7 @@ function renderHome(){
      +'<div><dt>Thèmes</dt><dd>Change les couleurs du site : doré, bleu, violet, rouge, vert et d\'autres, tous gratuits. Et quatre thèmes premium animés à 0,99 € : Espace, Jungle, Sakura et Montagne. Chaque thème a aussi ses propres animations de boutons.</dd></div>'
      +'<div><dt>FindMyMate Pro</dt><dd>5 € une seule fois : les 4 thèmes premium, le badge PRO, la décoration de profil et l\'envoi de gros fichiers.</dd></div>'
    +'</dl>'
-   +'<p class="hint">Les joueurs, les groupes et leurs vidéos sont des exemples pour l\'instant.</p>'
+   +'<p class="hint">Les profils ici sont des vrais comptes inscrits. Un compte est aussi demandé pour t\'écrire.</p>'
    +'</section>';
 }
 
@@ -1897,7 +1898,7 @@ function renderActive(){
   }
   $("#active").innerHTML=h;
 }
-function listPlayers(){var l=realList().concat(PLAYERS);if(!acct.user&&state.me.online&&state.me.pseudo.trim())l.unshift(meAsPlayer());return l;}
+function listPlayers(){if(!acct.user)return realList();var l=realList();if(state.me.pseudo.trim()&&REALBY[acct.user.id]){l.unshift(REALBY[acct.user.id]);}return l;}
 function renderResults(){
   var all=listPlayers(),list=all.filter(match);
   if(f.game){
@@ -1906,7 +1907,7 @@ function renderResults(){
     list.sort(function(a,b){return rk(b)-rk(a);});
   }
   $("#s-count").textContent=plural(list.length,"joueur")+(anyFilter()?" sur "+all.length:"");
-  var ssrc=$("#s-src");if(ssrc)ssrc.textContent=Object.keys(REALBY).length?"Joueurs inscrits + exemples pour tester.":"Joueurs d\'exemple pour tester le site.";
+  var ssrc=$("#s-src");if(ssrc)ssrc.textContent=acct.user?"Seuls les joueurs inscrits sont listés, pour te protéger.":"Connecte-toi pour voir et contacter les joueurs inscrits.";
   $("#results").innerHTML=list.length
     ?list.map(function(p){return playerRow(p,{game:f.game});}).join("")
     :'<div class="empty"><h2>Aucun joueur ne correspond</h2><p class="sub">Élargis le rang, change de jeu ou retire un filtre.</p><button type="button" class="btn primary" data-action="f-reset">Réinitialiser les filtres</button></div>';
@@ -2787,6 +2788,7 @@ document.addEventListener("click",function(e){
     case "menu-toggle":setMenu(!menuOpen);break;
     case "account":if(acct.user)signOutFlow();else{setMenu(false);openAuth(true);}break;
     case "auth-mode":authSetMode(!authModeSignup);break;
+    case "auth-eye":{var ap=$("#auth-pass"),show=ap.type==="password";ap.type=show?"text":"password";$("#auth-eye").textContent=show?"Masquer le mot de passe":"Afficher le mot de passe";ap.focus();break;}
     case "auth-close":closeAuth();break;
     case "open-menu":setMenu(true);break;
     case "theme-set":setTheme(id);break;
