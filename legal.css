@@ -1,0 +1,24 @@
+:root{--fond:#fffdf8;--surface:#fff;--surface-2:#fbf3dc;--ligne:#ecdfbc;--ligne-vive:#d6bf80;--or:#d4a21f;--or-fonce:#8a6508;--encre:#1f1808;--encre-douce:#615436;--font-titre:"Chakra Petch","Segoe UI",system-ui,sans-serif;--font-texte:"Figtree","Segoe UI",system-ui,sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:radial-gradient(60rem 26rem at 82% -10%,rgba(212,162,31,.17),transparent 70%) no-repeat top,var(--fond);color:var(--encre);font:400 1rem/1.65 var(--font-texte);-webkit-text-size-adjust:100%}
+a{color:var(--or-fonce)}
+:focus-visible{outline:2px solid var(--or-fonce);outline-offset:2px}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(255,253,248,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--ligne)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.65rem 1rem}
+.brand{display:flex;align-items:center;gap:.55rem;font-family:var(--font-titre);font-weight:700;font-size:1.3rem;text-decoration:none;color:var(--encre)}
+.brand svg{display:block}
+.back{display:inline-flex;align-items:center;min-height:46px;padding:.3rem 1.1rem;border:1.5px solid var(--or);border-radius:999px;background:var(--surface);color:var(--encre);font-weight:700;text-decoration:none}
+.back:hover{background:var(--surface-2)}
+main{width:min(46rem,100% - 2rem);margin:0 auto;padding:2.2rem 0 3rem}
+h1,h2{font-family:var(--font-titre);line-height:1.15;font-weight:600}
+h1{font-size:clamp(1.8rem,1.2rem + 3vw,2.6rem);margin:0 0 .4rem}
+h2{font-size:1.3rem;margin:2.2rem 0 .5rem}
+.maj{color:var(--encre-douce);margin:0 0 1.2rem;font-size:.92rem}
+.demo{padding:1rem 1.2rem;margin:1rem 0 1.5rem;background:var(--surface-2);border:2px solid var(--or);border-radius:16px}
+.demo p{margin:0}
+ul{padding-left:1.2rem}li{margin:.3rem 0}
+table{display:block;overflow-x:auto;max-width:100%;border-collapse:collapse;font-size:.93rem;margin:.6rem 0;background:var(--surface)}
+th,td{border:1px solid var(--ligne);padding:.55rem .7rem;text-align:left;vertical-align:top}th{background:var(--surface-2)}
+code{background:var(--surface-2);padding:.05rem .35rem;border-radius:6px;font-size:.9em}
+.ph{background:#ffe9a8;padding:0 .25rem;border-radius:4px}
+.nav{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--ligne);font-size:.92rem}
