@@ -709,12 +709,14 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="linklike" id="auth-eye" data-action="auth-eye" style="align-self:flex-start">Afficher le mot de passe</button>
     </div>
     <p class="err" id="auth-err" role="alert" hidden></p>
-    <button type="button" class="switchlink" id="auth-switch">Tu as déjà un compte ? Me connecter</button>
+    <button type="button" class="switchlink" id="auth-switch-login" data-action="auth-mode">Tu as déjà un compte ? Me connecter</button>
+    <button type="button" class="switchlink" id="auth-switch-signup" data-action="auth-mode" hidden>Pas encore de compte ? Créer un compte</button>
     <p class="note">Tes messages partent sur un serveur sécurisé, et seulement les joueurs à qui tu écris les lisent. Aucune donnée n'est revendue.</p>
     <div class="sheet-actions">
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v7</p>
   </form>
 </div>
 
@@ -2788,7 +2790,6 @@ document.addEventListener("click",function(e){
   switch(act){
     case "menu-toggle":setMenu(!menuOpen);break;
     case "account":if(acct.user)signOutFlow();else{setMenu(false);openAuth(true);}break;
-    case "auth-mode":authSetMode(!authModeSignup);break;
     case "auth-eye":{var ap=$("#auth-pass"),show=ap.type==="password";ap.type=show?"text":"password";$("#auth-eye").textContent=show?"Masquer le mot de passe":"Afficher le mot de passe";ap.focus();break;}
     case "auth-close":closeAuth();break;
     case "open-menu":setMenu(true);break;
@@ -3209,7 +3210,9 @@ function authSetMode(){
   $("#auth-ok").textContent=s?"Créer mon compte":"Se connecter";
   $("#auth-sub").textContent=s?"Gratuit. Pseudo, e-mail, mot de passe.":"Ton e-mail et ton mot de passe.";
   $("#auth-pseudo-field").hidden=!s;
-  $("#auth-switch").textContent=s?"Tu as déjà un compte ? Me connecter":"Pas encore de compte ? Créer un compte";
+  var bl=$("#auth-switch-login"),bs=$("#auth-switch-signup");
+  if(bl)bl.hidden=!s;
+  if(bs)bs.hidden=!!s;
 }
 function prettyAuthErr(e){
   var m=String((e&&e.message)||e);
@@ -3260,7 +3263,7 @@ applyTheme(state.theme);
 render();
 sbInit();
 try{$("#auth-form").addEventListener("submit",function(e){e.preventDefault();authSubmit();});}catch(e){}
-try{$("#auth-switch").addEventListener("click",function(){authSetMode(!authModeSignup);});}catch(e){}
+try{$("#auth-form").addEventListener("click",function(e){var el=e.target.closest("[data-action='auth-mode']");if(el)authSetMode(!authModeSignup);});}catch(e){}
 })();
 </script>
 
