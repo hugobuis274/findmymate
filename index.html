@@ -716,7 +716,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v9</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v10</p>
   </form>
 </div>
 
@@ -1727,6 +1727,8 @@ function setMenu(open,opts){
 }
 function go(next,opts){
   opts=opts||{};
+  if(!acct.user&&next!=="accueil"){next="accueil";try{if(location.hash!==""&&location.hash!=="#accueil")location.hash="accueil";}catch(e){}
+    setMenu(false);openAuth(false);toast("Connecte-toi pour accéder à cette page.");return;}
   route=next;
   if(next==="joueur")viewId=opts.id||viewId;
   if(next==="messages"){if(opts.thread){active.joueurs=opts.thread;msgsOpen=true;}else{msgsOpen=false;}}
@@ -1738,7 +1740,13 @@ function go(next,opts){
   var h=$("#app h1");
   if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true});}
 }
-window.addEventListener("hashchange",function(){var r=parseHash();if(r&&r!==route){route=r;render();setMenu(false);}});
+window.addEventListener("hashchange",function(){
+  var r=parseHash();
+  if(!r)return;
+  if(!acct.user&&r!=="accueil"){openAuth(false);toast("Connecte-toi pour accéder à cette page.");
+    try{if(location.hash!=="#accueil")location.hash="accueil";}catch(e){}return;}
+  if(r!==route){route=r;render();setMenu(false);}
+});
 
 /* ---------- filtres de recherche ---------- */
 var f=freshFilters();
@@ -3088,7 +3096,8 @@ function sbInit(){
   sb.auth.getSession().then(function(r){
     var s=r&&r.data?r.data.session:null;
     acct.user=s?s.user:null;
-    renderAccountMenu();
+    if(!acct.user&&route!=="accueil"){route="accueil";viewId=null;try{location.hash="accueil";}catch(e){}}
+    renderAccountMenu();render();
     if(acct.user)loadAccountStuff();
   });
   sb.auth.onAuthStateChange(function(evt,sess){
@@ -3105,7 +3114,9 @@ function onSignedOut(oldId){
   acct.ch=null;
   if(oldId)delete REALBY[oldId];
   save();updateBadges();
-  if(route==="recherche"||route==="messages"||route==="joueur"||route==="profil")render();
+  if(route!=="accueil"){route="accueil";viewId=null;try{location.hash="accueil";}catch(e){}
+}
+render();
 }
 function loadAccountStuff(){
   var uid=acct.user.id;

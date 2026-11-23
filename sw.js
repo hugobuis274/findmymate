@@ -1,6 +1,6 @@
 // FindMyMate : service worker simple.
 // Change le numéro de VERSION à chaque nouvelle publication du site : l'ancien cache est alors supprimé.
-var VERSION = "v9";
+var VERSION = "v10";
 var CACHE = "findmymate-" + VERSION;
 var FILES = [
   "./",
