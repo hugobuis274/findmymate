@@ -716,7 +716,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v11</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v12</p>
   </form>
 </div>
 
@@ -1864,7 +1864,7 @@ function headline(){
 }
 function renderSearch(){
   app.innerHTML='<section class="wrap page" aria-labelledby="h-search">'
-   +'<header class="page-head"><h1 id="h-search"></h1><p class="sub">Parcours les profils, filtre par jeu et par rang, puis envoie un DM.</p>'+(state.me.online?'':'<p class="hint">Ton profil est hors ligne : les autres joueurs ne peuvent pas te trouver. Tu peux changer ça dans Mon profil.</p>')+'</header>'
+   +'<header class="page-head"><h1 id="h-search"></h1><p class="sub">Parcours les profils, filtre par jeu et par rang, puis envoie un DM.</p>'+((state.me.online||acct.user)?'':'<p class="hint">Ton profil est hors ligne : connecte-toi et mets-le en ligne dans Mon profil pour que les autres te trouvent.</p>')+'</header>'
    +'<form class="toolbar" id="search-form" role="search" novalidate>'
      +'<div class="search"><label class="sr" for="q">Chercher un pseudo ou un mot de la bio</label><input id="q" type="search" enterkeyhint="search" placeholder="Chercher un pseudo ou un mot de la bio" autocomplete="off"></div>'
      +'<button type="submit" class="btn primary">Chercher</button>'
@@ -1968,7 +1968,7 @@ function renderProfile(){
          +'<label class="radio"><input type="radio" name="me-online" value="on"'+(me.online?' checked':'')+'><span><strong>Profil en ligne</strong><small>Les autres joueurs peuvent te trouver dans « Rechercher des joueurs ».</small></span></label>'
          +'<label class="radio"><input type="radio" name="me-online" value="off"'+(me.online?'':' checked')+'><span><strong>Profil hors ligne</strong><small>Personne ne peut te trouver. Toi, tu peux toujours chercher des joueurs et écrire.</small></span></label>'
        +'</div>'
-       +'<p class="hint">Dans cette version, ton profil en ligne apparaît seulement dans ta propre liste, pour tester. Les autres joueurs le verront quand les comptes existeront. Il faut un pseudo pour apparaître.</p>'
+       +'<p class="hint">Connecté, ton profil est en ligne automatiquement et visible dans « Rechercher des joueurs ». Il faut un pseudo et au moins un jeu pour bien apparaître.</p>'
        +'<p class="err" id="err-statut" role="alert" hidden></p>'
        +'<div class="form-foot"><button type="submit" class="btn primary">Valider</button><p class="status" id="st-statut" role="status"></p></div>'
      +'</form>'
@@ -2004,7 +2004,8 @@ function updateProfileHead(){
   var nm=state.me.pseudo.trim();
   $("#ph-av").innerHTML=avatar(nm||"?","lg",state.me);renderPhotoBlock();
   var gs=state.me.games.map(function(x){return G[x.g].name;});
-  var ps=$("#ph-status");ps.textContent=state.me.online?"Profil en ligne":"Profil hors ligne";ps.classList.toggle("on",!!state.me.online);
+  var onl=!!(acct.user||state.me.online);
+  var ps=$("#ph-status");ps.textContent=onl?"Profil en ligne":"Profil hors ligne";ps.classList.toggle("on",onl);
   $("#ph-pro").innerHTML=isPro()?proBadge():"";
   var hd=$(".profile-head"),pt=state.me.ptheme,old=hd&&hd.querySelector(":scope>.pbg");
   if(hd){if(old)old.remove();
@@ -3132,6 +3133,7 @@ function loadAccountStuff(){
       if(!state.me.veut.trim())state.me.veut=acct.row.veut||"";
       if(!state.me.photo&&acct.row.photo)state.me.photo=acct.row.photo;
       if(!state.me.games.length&&Array.isArray(acct.row.games))state.me.games=acct.row.games.filter(function(x){return x&&G[x.g];});
+      state.me.online=true;
       REALBY[uid]=realFromRow(acct.row);
       save();
     }
