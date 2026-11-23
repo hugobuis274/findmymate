@@ -716,7 +716,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v10</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v11</p>
   </form>
 </div>
 
@@ -1918,7 +1918,7 @@ function renderResults(){
     list.sort(function(a,b){return rk(b)-rk(a);});
   }
   $("#s-count").textContent=plural(list.length,"joueur")+(anyFilter()?" sur "+all.length:"");
-  var ssrc=$("#s-src");if(ssrc)ssrc.textContent=acct.user?"Seuls les joueurs inscrits sont listés, pour te protéger.":"Connecte-toi pour voir et contacter les joueurs inscrits.";
+  var ssrc=$("#s-src");if(ssrc)ssrc.textContent=(acct.user?"Seuls les joueurs inscrits sont listés, pour te protéger.":"Connecte-toi pour voir et contacter les joueurs inscrits.")+(acct.user?(PROFCOUNT===null?"":(PROFCOUNT<0?"  [profils du serveur : ERREUR]":"  ["+PROFCOUNT+" profil"+(PROFCOUNT>1?"s":"")+" chargé"+(PROFCOUNT>1?"s":"")+" du serveur]")):"");
   $("#results").innerHTML=list.length
     ?list.map(function(p){return playerRow(p,{game:f.game});}).join("")
     :'<div class="empty"><h2>Aucun joueur ne correspond</h2><p class="sub">Élargis le rang, change de jeu ou retire un filtre.</p><button type="button" class="btn primary" data-action="f-reset">Réinitialiser les filtres</button></div>';
@@ -3139,11 +3139,13 @@ function loadAccountStuff(){
     refreshRealProfiles();
     loadMessagesOnce();
     subscribeRealtime();
+    if(!acct.rpTimer)acct.rpTimer=setInterval(refreshRealProfiles,20000);
   });
 }
 function refreshRealProfiles(){
   sb.from("profiles").select("*").limit(500).then(function(r){
-    if(r.error)return;
+    if(r.error){PROFCOUNT=-1;return;}
+    PROFCOUNT=(r.data||[]).length;
     (r.data||[]).forEach(function(row){REALBY[row.id]=realFromRow(row);});
     if(route==="recherche"||route==="messages"||route==="joueur")render();
   });
@@ -3205,6 +3207,7 @@ function syncProfileRow(){
   });
 }
 var authModeSignup=true;
+var PROFCOUNT=null;
 function openAuth(signup){
   authModeSignup=signup===true;
   authSetMode();
