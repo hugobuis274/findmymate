@@ -716,7 +716,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v8</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v9</p>
   </form>
 </div>
 
@@ -2789,7 +2789,7 @@ document.addEventListener("click",function(e){
   var act=el.dataset.action,v=el.dataset.v,id=el.dataset.id;
   switch(act){
     case "menu-toggle":setMenu(!menuOpen);break;
-    case "account":if(acct.user)signOutFlow();else{setMenu(false);openAuth(true);}break;
+    case "account":if(acct.user)signOutFlow();else{setMenu(false);openAuth(false);}break;
     case "auth-eye":{var ap=$("#auth-pass"),show=ap.type==="password";ap.type=show?"text":"password";$("#auth-eye").textContent=show?"Masquer le mot de passe":"Afficher le mot de passe";ap.focus();break;}
     case "auth-close":closeAuth();break;
     case "open-menu":setMenu(true);break;
@@ -3195,7 +3195,7 @@ function syncProfileRow(){
 }
 var authModeSignup=true;
 function openAuth(signup){
-  authModeSignup=signup!==false;
+  authModeSignup=signup===true;
   authSetMode();
   var pe=$("#auth-pseudo");
   if(!pe.value&&state.me.pseudo.trim())pe.value=state.me.pseudo.trim();
