@@ -1,6 +1,6 @@
 // FindMyMate : service worker simple.
 // Change le numéro de VERSION à chaque nouvelle publication du site : l'ancien cache est alors supprimé.
-var VERSION = "v25";
+var VERSION = "v26";
 var CACHE = "findmymate-" + VERSION;
 var FILES = [
   "./",
@@ -30,11 +30,22 @@ self.addEventListener("activate", function (e) {
   );
 });
 
-// Cache d'abord (rapide, marche hors ligne). En même temps, on va chercher la version à jour
-// et on la range dans le cache : elle s'affichera à la visite suivante.
+// Les pages HTML (accueil + pages légales) sont chargées d'abord depuis le réseau : le texte
+// affiché est toujours à jour. Si le réseau échoue, on ressert la copie en cache (hors ligne).
+// Le reste (images, polices du site, CSS) reste cache d'abord, avec rafraîchissement en fond.
 self.addEventListener("fetch", function (e) {
   var req = e.request;
   if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
+  var isPage = req.mode === "navigate" || /\.html$/.test(new URL(req.url).pathname);
+  if (isPage) {
+    e.respondWith(
+      fetch(req).then(function (res) {
+        if (res && res.ok) { var copy = res.clone(); caches.open(CACHE).then(function (c) { c.put(req, copy); }); }
+        return res;
+      }).catch(function () { return caches.match(req).then(function (cached) { return cached || caches.match("./"); }); })
+    );
+    return;
+  }
   e.respondWith(
     caches.match(req).then(function (cached) {
       var refresh = fetch(req).then(function (res) {
