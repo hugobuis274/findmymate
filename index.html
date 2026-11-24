@@ -716,7 +716,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v16</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v17</p>
   </form>
 </div>
 
@@ -1798,7 +1798,7 @@ function playerRow(p,o){
   var pt=isArtTheme(p.ptheme)?p.ptheme:"";
   return '<article class="player'+(o.preview?' stack':'')+(pt?' pthemed':'')+'"'+(pt?' data-theme="'+pt+'"':'')+'>'
     +pbg(pt)
-    +'<div class="who">'+avatar(p.name,"md",p.id==="me"?p:null)+'<div><div class="name-line"><'+nameTag+' class="name">'+esc(p.name)+'</'+nameTag+'>'+(p.pro?proBadge():'')+(a>0?'<span class="age">'+a+' ans</span>':'')+(self?'<span class="tag me">C\'est toi, en ligne</span>':'')+(o.preview?'<span class="tag'+(state.me.online?' me':'')+'">'+(state.me.online?'En ligne':'Hors ligne')+'</span>':'')+'</div>'+bio+'</div></div>'
+    +'<div class="who">'+avatar(p.name,"md",(p.id==="me"||p.photo)?p:null)+'<div><div class="name-line"><'+nameTag+' class="name">'+esc(p.name)+'</'+nameTag+'>'+(p.pro?proBadge():'')+(a>0?'<span class="age">'+a+' ans</span>':'')+(self?'<span class="tag me">C\'est toi, en ligne</span>':'')+(o.preview?'<span class="tag'+(state.me.online?' me':'')+'">'+(state.me.online?'En ligne':'Hors ligne')+'</span>':'')+'</div>'+bio+'</div></div>'
     +gamesHTML
     +'<div class="want">'+veut+tags+dispo+clipLine+'</div>'
     +act
@@ -1904,7 +1904,7 @@ function renderActive(){
   }
   $("#active").innerHTML=h;
 }
-function listPlayers(){if(!acct.user)return realList();var l=realList();if(state.me.pseudo.trim()&&REALBY[acct.user.id]){l.unshift(REALBY[acct.user.id]);}return l;}
+function listPlayers(){return realList();}
 function renderResults(){
   var all=listPlayers(),list=all.filter(match);
   if(f.game){
@@ -1929,7 +1929,7 @@ function renderPlayer(){
   app.innerHTML='<section class="wrap page">'
    +'<button type="button" class="btn ghost back-link" data-action="back-list">‹ Retour à la liste</button>'
    +'<div class="pfull'+(isArtTheme(p.ptheme)?' pthemed" data-theme="'+p.ptheme:'')+'">'+pbg(p.ptheme)
-   +'<header class="profile-head">'+avatar(p.name,"lg")+'<div><h1>'+esc(p.name)+(p.pro?' '+proBadge():'')+'</h1><p class="sub">'+(a>0?a+' ans':'')+'</p></div></header>'
+   +'<header class="profile-head">'+avatar(p.name,"lg",p.photo?p:null)+'<div><h1>'+esc(p.name)+(p.pro?' '+proBadge():'')+'</h1><p class="sub">'+(a>0?a+' ans':'')+'</p></div></header>'
    +'<div class="detail-grid">'
      +'<section class="card-form"><h2>Biographie</h2><p>'+esc(p.bio)+'</p>'
        +'<div class="want"><p><span class="lead">Recherche</span> '+esc(p.veut)+'</p>'
@@ -2078,7 +2078,7 @@ function threadName(k,id){
 }
 function threadAvatar(k,id,cls){
   if(k==="joueurs"&&id==="sys")return '<span class="av sys '+(cls||"")+'" aria-hidden="true">FM</span>';
-  return avatar(threadName(k,id),cls);
+  var pp=playerById(id);return avatar(threadName(k,id),cls,(pp&&pp.photo)?pp:null);
 }
 function threadNote(k,id){
   if(k==="groupes"){var g=groupInfo(id);if(g&&g.mine)return "Tu es le président · "+(g.access==="invitation"?"sur invitation":"ouvert à tous");var ge=GROUPS.find(function(x){return x.id===id;}),ch=ge&&playerById(ge.chef);return (ch?"Président : "+ch.name+" · ":"")+"groupe d'exemple, les autres membres ne répondent pas.";}
@@ -2228,7 +2228,7 @@ function mrow(p,role,gid,actor){
   var btns="";
   if(actor==="president"&&role!=="president")btns+='<button type="button" class="btn ghost kick" data-action="'+(role==="vp"?"vp-unset":"vp-set")+'" data-id="'+esc(gid)+'" data-pid="'+esc(p.id)+'">'+(role==="vp"?"Retirer le badge":"Nommer vice-président")+'</button>';
   if(canKickRole(actor,role)){var on=pendingKick===gid+":"+p.id;btns+='<button type="button" class="btn '+(on?'warn':'ghost')+' kick" data-action="kick" data-id="'+esc(gid)+'" data-pid="'+esc(p.id)+'" aria-label="Exclure '+esc(p.name)+' du groupe">'+(on?"Confirmer l\'exclusion":"Exclure")+'</button>';}
-  return '<li class="mrow">'+avatar(p.name,"sm")+'<span class="mname">'+esc(p.name)+(p.pro?" "+proBadge():"")+'</span>'+roleTag(role)+(btns?'<span class="mact">'+btns+'</span>':'')+'</li>';
+  return '<li class="mrow">'+avatar(p.name,"sm",(p&&p.photo)?p:null)+'<span class="mname">'+esc(p.name)+(p.pro?" "+proBadge():"")+'</span>'+roleTag(role)+(btns?'<span class="mact">'+btns+'</span>':'')+'</li>';
 }
 function membersPanel(g){
   var gid=g.id,rows="",note="",form="",ex="";
@@ -2239,7 +2239,7 @@ function membersPanel(g){
     note='<p class="hint">Tu es le président : tu peux exclure n\'importe quel membre, nommer des vice-présidents et leur retirer le badge. Les vice-présidents peuvent exclure des membres, mais pas les autres vice-présidents ni toi. Un joueur exclu ne revient que si tu le réadmets.</p>';
     var left=PLAYERS.filter(function(p){return g.invited.indexOf(p.id)<0&&g.excluded.indexOf(p.id)<0;});
     form=left.length?'<form class="invite" data-id="'+esc(gid)+'" novalidate><label class="sr" for="inv-sel">Joueur à ajouter</label><select id="inv-sel">'+left.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join("")+'</select><button type="submit" class="btn primary">'+(g.access==="invitation"?"Inviter":"Ajouter")+'</button></form>':'<p class="hint invite">Tous les joueurs d\'exemple sont déjà dans le groupe ou exclus.</p>';
-    if(g.excluded.length)ex='<h4 class="mh">Exclus</h4><ul class="mlist">'+g.excluded.map(function(id){var p=playerById(id);return p?'<li class="mrow">'+avatar(p.name,"sm")+'<span class="mname">'+esc(p.name)+'</span><span class="mact"><button type="button" class="btn ghost kick" data-action="readmit" data-id="'+esc(gid)+'" data-pid="'+esc(p.id)+'">Réadmettre</button></span></li>':"";}).join("")+'</ul>';
+    if(g.excluded.length)ex='<h4 class="mh">Exclus</h4><ul class="mlist">'+g.excluded.map(function(id){var p=playerById(id);return p?'<li class="mrow">'+avatar(p.name,"sm",p.photo?p:null)+'<span class="mname">'+esc(p.name)+'</span><span class="mact"><button type="button" class="btn ghost kick" data-action="readmit" data-id="'+esc(gid)+'" data-pid="'+esc(p.id)+'">Réadmettre</button></span></li>':"";}).join("")+'</ul>';
   }else{
     var ge=GROUPS.find(function(x){return x.id===gid;}),chef=ge&&playerById(ge.chef),gv=(ge&&ge.vps)||[];
     rows=(chef?mrow(chef,"president",gid,"member"):"")
@@ -2286,7 +2286,7 @@ function openDM(id,opener){
   var p=playerById(id);if(!p)return;
   dmFor=p;dmOpener=opener||null;
   var gm=(f.game&&route==="recherche"?p.games.filter(function(x){return x.g===f.game;}):p.games)[0]||p.games[0];
-  $("#dm-av").innerHTML=avatar(p.name,"md");
+  $("#dm-av").innerHTML=avatar(p.name,"md",p.photo?p:null);
   $("#dm-title").textContent="Message à "+p.name;
   $("#dm-ctx").textContent=gm?G[gm.g].name+", "+gm.r+", "+p.age+" ans":p.age+" ans";
   var sugg=["Salut "+p.name+" ! Une game ce soir ?"];
@@ -2611,7 +2611,7 @@ function vocRows(){
   var kind=voc.kind,id=voc.tid,nm=state.me.pseudo.trim()||"Toi";
   var me='<li class="voc-row'+(voc.speaking?' speaking':'')+'"><span class="voc-av">'+avatar(nm,"md",state.me)+'</span><span class="voc-name">'+esc(nm)+' <small>(toi)</small>'+(isPro()?' '+proBadge():'')+'</span><span class="voc-state">'+(voc.muted?"Micro coupé":(voc.noMic?"Sans micro":"Micro actif"))+'</span></li>';
   var other="";
-  if(kind==="joueurs"){var p=playerById(id);if(p)other='<li class="voc-row away"><span class="voc-av">'+avatar(p.name,"md")+'</span><span class="voc-name">'+esc(p.name)+(p.pro?' '+proBadge():'')+'</span><span class="voc-state">Joueur d\'exemple : n\'a pas rejoint</span></li>';}
+  if(kind==="joueurs"){var p=playerById(id);if(p)other='<li class="voc-row away"><span class="voc-av">'+avatar(p.name,"md",p.photo?p:null)+'</span><span class="voc-name">'+esc(p.name)+(p.pro?' '+proBadge():'')+'</span><span class="voc-state">Joueur d\'exemple : n\'a pas rejoint</span></li>';}
   else other='<li class="voc-row away"><span class="voc-name">Les autres membres sont des exemples : personne d\'autre n\'est dans la voc.</span></li>';
   $("#voc-list").innerHTML=me+other;
 }
@@ -2730,7 +2730,7 @@ function notifyMsg(pid,text){
   if(state.fx.notif===false)return;
   var p=playerById(pid);if(!p)return;
   notifTid=pid;
-  $("#n-go").innerHTML=avatar(p.name,"md")+'<span class="n-tx"><strong>Nouveau message de '+esc(p.name)+'</strong><span>'+esc(text)+'</span></span>';
+  $("#n-go").innerHTML=avatar(p.name,"md",p.photo?p:null)+'<span class="n-tx"><strong>Nouveau message de '+esc(p.name)+'</strong><span>'+esc(text)+'</span></span>';
   $("#notif").hidden=false;clearTimeout(notifTimer);notifTimer=setTimeout(notifHide,7000);
   beep();
   try{if(navigator.vibrate)navigator.vibrate(120);}catch(e){}
