@@ -413,17 +413,6 @@ input::placeholder,textarea::placeholder{color:var(--encre-faible)}
 /* thèmes premium */
 
 
-/* voc réduite et notifications */
-.voc-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:58;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;justify-content:center;width:max-content;max-width:calc(100% - 1.5rem);padding:.55rem .7rem .55rem 1rem;border-radius:26px;background:var(--panneau,var(--surface));color:var(--encre);border:2px solid var(--or);box-shadow:0 10px 30px rgb(0 0 0 / .35)}
-.voc-bar[hidden]{display:none}
-.voc-bar .vb-dot{width:.7rem;height:.7rem;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 0 rgb(47 191 113 / .6);animation:vbp 1.8s infinite}
-.voc-bar.speaking .vb-dot{background:var(--or)}
-.voc-bar .vb-t{font-weight:700;font-size:.92rem;overflow-wrap:anywhere}
-.voc-bar .vb-t small{font-weight:600;color:var(--encre-douce);font-variant-numeric:tabular-nums;margin-left:.3rem}
-.voc-bar .btn{min-height:40px;padding:.3rem .85rem;font-size:.9rem}
-body.in-voc .toast{bottom:calc(6.5rem + env(safe-area-inset-bottom,0px))}
-@keyframes vbp{70%{box-shadow:0 0 0 .6rem rgb(47 191 113 / 0)}100%{box-shadow:0 0 0 0 rgb(47 191 113 / 0)}}
-@media (prefers-reduced-motion:reduce){.voc-bar .vb-dot{animation:none}}
 .notif{position:fixed;top:calc(4.6rem + env(safe-area-inset-top,0px));right:.9rem;z-index:59;width:min(22rem,calc(100% - 1.8rem));display:flex;align-items:stretch;border-radius:16px;background:var(--panneau,var(--surface));color:var(--encre);border:1px solid var(--ligne-vive,var(--ligne));box-shadow:0 12px 32px rgb(0 0 0 / .35);animation:ntin .28s ease-out}
 .notif[hidden]{display:none}
 .notif .n-go{flex:1;min-width:0;display:flex;gap:.7rem;align-items:center;text-align:left;padding:.7rem .8rem;background:none;border:0;color:inherit;font:inherit;cursor:pointer;border-radius:16px 0 0 16px}
@@ -435,7 +424,7 @@ body.in-voc .toast{bottom:calc(6.5rem + env(safe-area-inset-bottom,0px))}
 @keyframes ntin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.notif{animation:none}}
 .fx-perm{margin-top:.6rem}
-/* FindMyMate Pro, bannières, médias, voc */
+/* FindMyMate Pro, bannières, médias */
 .pro-badge{display:inline-flex;align-items:center;gap:.25rem;padding:.08rem .5rem;border-radius:999px;background:linear-gradient(135deg,var(--or-clair),var(--or));color:var(--sur-or);font:700 .68rem/1.5 var(--font-titre);letter-spacing:.06em;vertical-align:middle;box-shadow:0 0 0 1px rgb(0 0 0 / .12) inset}
 .pro-badge svg{width:.72rem;height:.72rem;fill:currentColor}
 h1 .pro-badge{font-size:.8rem;padding:.12rem .65rem;margin-left:.3rem}
@@ -478,16 +467,10 @@ h1 .pro-badge{font-size:.8rem;padding:.12rem .65rem;margin-left:.3rem}
 .frow .btn{min-height:40px;padding:.3rem .8rem;font-size:.9rem}
 .tfind-all{justify-self:start;font-size:.9rem}
 .th-members{padding:1rem 1.1rem;border-bottom:1px solid var(--ligne);max-height:18rem;overflow:auto}
-.thread-head .voc-btn{margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;min-height:40px;padding:.3rem .9rem}
-.voc-btn svg,.icon-btn svg{width:1.2rem;height:1.2rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn svg{width:1.2rem;height:1.2rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .composer{align-items:center}
 .composer input#msg-input{flex:1;min-width:0}
 .composer .icon-btn{flex:none;width:44px;height:44px}
-.rec-bar{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;padding:.9rem 1.1rem;border-top:1px solid var(--ligne)}
-.rec-dot{width:.8rem;height:.8rem;border-radius:50%;background:var(--alerte);animation:rec-blink 1s ease-in-out infinite}
-@keyframes rec-blink{50%{opacity:.25}}
-.rec-time{font-variant-numeric:tabular-nums;font-weight:700}
-.rec-note{color:var(--encre-douce);margin-right:auto}
 .media-err{padding:.1rem 1.1rem .4rem}
 .media-pro{display:inline-block;margin:0 1.1rem .8rem;font-weight:700;color:var(--or-fonce)}
 .bubble.has-media{white-space:normal;display:grid;gap:.3rem}
@@ -496,17 +479,7 @@ h1 .pro-badge{font-size:.8rem;padding:.12rem .65rem;margin-left:.3rem}
 .media audio{display:block;width:min(18rem,100%);max-width:100%}
 .media-ph{font-size:.85rem;opacity:.8}
 .media-cap{font-size:.78rem;opacity:.8;overflow-wrap:anywhere}
-.voc{width:min(30rem,100%)}
-.voc-time{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:700;color:var(--encre-douce)}
-.voc-list{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
-.voc-row{display:flex;align-items:center;gap:.8rem;padding:.7rem .9rem;border:1px solid var(--ligne);border-radius:14px;background:var(--surface-2);transition:box-shadow .15s,border-color .15s}
-.voc-row.speaking{border-color:var(--or);box-shadow:0 0 0 3px var(--halo,rgb(212 162 31 / .3)),0 0 0 2px var(--or)}
-.voc-row.away{opacity:.75}
-.voc-name{flex:1;min-width:0;overflow-wrap:anywhere}
-.voc-name small{color:var(--encre-douce)}
-.voc-state{font-size:.82rem;color:var(--encre-douce);text-align:right}
-@media (prefers-reduced-motion:reduce){.rec-dot{animation:none}}
-html[data-art] .pro-hero,html[data-art] .cmp-wrap,html[data-art] .voc-row{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+html[data-art] .pro-hero,html[data-art] .cmp-wrap{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 
 /* animations de menu et de boutons par thème */
 html[data-art] .menu-panel{clip-path:inset(0 -40px calc(100% - var(--rv,1)*(100% + 40px)) -40px)}
@@ -716,7 +689,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v18</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v19</p>
   </form>
 </div>
 
@@ -744,15 +717,6 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
   </form>
 </div>
 
-<div class="overlay" id="voc" hidden>
-  <div class="sheet voc" role="dialog" aria-modal="true" aria-labelledby="voc-title">
-    <div class="sheet-head"><div><h2 id="voc-title">Voc</h2><p class="note" id="voc-sub"></p></div><span class="voc-time" id="voc-time">0:00</span></div>
-    <ul class="voc-list" id="voc-list"></ul>
-    <p class="err" id="voc-err" role="alert" hidden></p>
-    <div class="sheet-actions"><button type="button" class="btn ghost" id="voc-mute" data-action="voc-mute" aria-pressed="false">Couper le micro</button><button type="button" class="btn ghost" data-action="voc-min">Réduire</button><button type="button" class="btn warn" data-action="voc-close">Quitter la voc</button></div>
-    <p class="note">Aperçu : ton micro est testé ici et tu vois quand tu parles, mais ta voix ne passe pas encore aux autres joueurs, il faudra un serveur pour ça. Les joueurs d'exemple n'entendent rien.</p>
-  </div>
-</div>
 
 <div class="overlay" id="vid" hidden>
   <div class="sheet vid-sheet" role="dialog" aria-modal="true" aria-labelledby="vid-title">
@@ -769,7 +733,6 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
   </div>
 </div>
 
-<div class="voc-bar" id="voc-bar" hidden><span class="vb-dot" aria-hidden="true"></span><span class="vb-t" id="vb-t"></span><button type="button" class="btn ghost" data-action="voc-expand">Ouvrir</button><button type="button" class="btn ghost" id="vb-mute" data-action="voc-mute" aria-pressed="false">Couper le micro</button><button type="button" class="btn warn" data-action="voc-close">Quitter</button></div>
 <div class="notif" id="notif" role="status" aria-live="polite" hidden><button type="button" class="n-go" id="n-go" data-action="notif-open"></button><button type="button" class="n-x" data-action="notif-close" aria-label="Fermer la notification">×</button></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -1497,7 +1460,7 @@ var Fx=(function(){
     cx.globalAlpha=1;
     if(ps.length)raf=requestAnimationFrame(loop);else{raf=0;cx.clearRect(0,0,innerWidth,innerHeight);}
   }
-  var SEL=".btn,.menu-btn,.menu-item,.icon-btn,.chip,.seg a,.th,.radio,.pill,.rec-btn,.clip,.back,[data-action]";
+  var SEL=".btn,.menu-btn,.menu-item,.icon-btn,.chip,.seg a,.th,.radio,.pill,.clip,.back,[data-action]";
   function hit(e){
     var el=e.target&&e.target.closest?e.target.closest(SEL):null;
     if(!el||el.disabled||el.getAttribute("aria-disabled")==="true")return null;
@@ -2117,16 +2080,15 @@ function renderMessages(){
    +'<div class="msgs" id="msgs" data-open="'+(msgsOpen?1:0)+'">'
      +'<aside class="threads" aria-label="Conversations"><div class="searchbar th-search" role="search"><label class="sr" for="th-q">Chercher dans les messages</label><input id="th-q" type="search" placeholder="'+(k==="groupes"?"Chercher dans mes groupes":"Chercher un joueur ou un message")+'" autocomplete="off" value="'+esc(thq)+'"></div><ul id="thread-list"></ul><div class="tfind" id="tfind"></div></aside>'
      +'<section class="thread" aria-label="Conversation">'
-       +'<header class="thread-head"><button type="button" class="back" data-action="back" aria-label="Retour aux conversations">‹</button><span id="th-av"></span><div><h2 id="th-name"></h2><p class="note" id="th-note"></p></div><button type="button" class="btn ghost" id="mem-open" data-action="group-members" hidden>Membres</button><button type="button" class="btn ghost voc-btn" id="voc-open" data-action="voc-open"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/></svg>Voc</button></header>'
+       +'<header class="thread-head"><button type="button" class="back" data-action="back" aria-label="Retour aux conversations">‹</button><span id="th-av"></span><div><h2 id="th-name"></h2><p class="note" id="th-note"></p></div><button type="button" class="btn ghost" id="mem-open" data-action="group-members" hidden>Membres</button></header>'
        +'<div class="th-members" id="th-members" hidden></div>'
        +'<div class="bubbles" id="bubbles" tabindex="0" aria-label="Messages"></div>'
        +'<form class="composer" id="composer" novalidate>'
          +'<button type="button" class="icon-btn" data-action="attach" aria-label="Joindre une photo ou une vidéo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/></svg></button>'
-         +'<button type="button" class="icon-btn" data-action="rec-start" aria-label="Enregistrer un message vocal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/></svg></button>'
+         +''
          +'<label class="sr" for="msg-input">Ton message</label><input id="msg-input" maxlength="500" autocomplete="off" enterkeyhint="send" placeholder="Écris ton message"><button type="submit" class="btn primary">Envoyer</button>'
          +'<input type="file" id="media-file" accept="image/*,video/*" hidden></form>'
-       +'<div class="rec-bar" id="rec-bar" hidden><span class="rec-dot" aria-hidden="true"></span><span class="rec-time" id="rec-time">0:00</span><span class="rec-note">Enregistrement</span><button type="button" class="btn ghost" data-action="rec-cancel">Annuler</button><button type="button" class="btn primary" data-action="rec-send">Envoyer</button><span class="sr" role="status" id="rec-sr"></span></div>'
-       +'<p class="err media-err" id="media-err" role="alert" hidden></p><a class="media-pro" id="media-pro" href="#pro" data-route="pro" hidden>Découvrir FindMyMate Pro</a>'
+              +'<p class="err media-err" id="media-err" role="alert" hidden></p><a class="media-pro" id="media-pro" href="#pro" data-route="pro" hidden>Découvrir FindMyMate Pro</a>'
        +'<p class="readonly" id="readonly" hidden>Ce message vient de l\'équipe FindMyMate, tu ne peux pas y répondre.</p>'
      +'</section></div></section>';
   if(k==="joueurs"&&(!isNarrow()||msgsOpen))markRead(active.joueurs);
@@ -2182,12 +2144,10 @@ function renderThreadList(){
   }).join("");
 }
 function renderThread(){
-  if(rec.on)recStop(true);
   freeMediaUrls();hideErr("media-err");$("#media-pro").hidden=true;
   var k=kindOf(),id=active[k],msgs=store(k)[id]||[];
   $("#th-av").innerHTML=threadAvatar(k,id,"md");
   $("#th-name").innerHTML=esc(threadName(k,id))+threadBadge(k,id);
-  $("#voc-open").hidden=(k==="joueurs"&&id==="sys");
   $("#mem-open").hidden=(k!=="groupes");
   $("#th-note").textContent=threadNote(k,id);
   $("#bubbles").innerHTML=msgs.map(function(m){
@@ -2503,7 +2463,6 @@ function renderPro(){
     ["Profil entier habillé en thème animé","Avec chaque thème acheté","Les 4 thèmes"],
     ["Photo envoyée en message","10 Mo maximum","100 Mo maximum"],
     ["Vidéo envoyée en message","50 Mo maximum","2 Go maximum"],
-    ["Messages vocaux et voc","Oui","Oui"],
     ["Profil, recherche, DM, groupes, photo de profil","Oui","Oui"]
   ];
   app.innerHTML='<section class="wrap page pro-page">'
@@ -2520,7 +2479,7 @@ function renderPro(){
     +'</tbody></table></div></section>';
 }
 
-/* ---------- messages : photos, vidéos, vocaux ---------- */
+/* ---------- messages : photos, vidéos ---------- */
 function threadBadge(k,id){if(k!=="joueurs")return "";var p=playerById(id);return p&&p.pro?" "+proBadge():"";}
 function msgPreview(m){if(m&&m.media)return m.media.k==="img"?"Photo":(m.media.k==="vid"?"Vidéo":"Message vocal");return m?String(m.text||""):"";}
 function mediaHTML(m){
@@ -2570,119 +2529,6 @@ function saveMedia(blob,k,meta,where){
     if((route==="messages"||route==="messages-groupes")&&kindOf()===kind&&active[kind]===tid){renderThreadList();renderThread();}
   }).catch(function(){showErr("media-err","Impossible d'enregistrer ce fichier : il n'y a pas assez de place sur cet appareil.");});
 }
-function micMsg(err){
-  var n=err&&err.name;
-  if(n==="NotAllowedError"||n==="SecurityError")return "Le micro est bloqué. Autorise-le pour ce site dans ton navigateur, puis réessaie.";
-  if(n==="NotFoundError"||n==="OverconstrainedError")return "Aucun micro n'a été trouvé sur cet appareil.";
-  return "Le micro n'est pas disponible ici.";
-}
-var rec={on:false};
-function recUI(on){var c=$("#composer"),b=$("#rec-bar");if(c)c.hidden=on;if(b)b.hidden=!on;var sr=$("#rec-sr");if(sr)sr.textContent=on?"Enregistrement en cours":"";}
-function recStart(){
-  hideErr("media-err");$("#media-pro").hidden=true;
-  if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder)){showErr("media-err","Ton navigateur ne permet pas d'enregistrer un message vocal ici.");return;}
-  var kind=kindOf(),tid=active[kind];
-  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
-    var mt=["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/ogg;codecs=opus"].filter(function(t){try{return MediaRecorder.isTypeSupported(t);}catch(e){return false;}})[0]||"";
-    var mr;
-    try{mr=mt?new MediaRecorder(stream,{mimeType:mt}):new MediaRecorder(stream);}catch(e){stream.getTracks().forEach(function(t){t.stop();});showErr("media-err","Ton navigateur ne permet pas d'enregistrer un message vocal ici.");return;}
-    rec={on:true,mr:mr,chunks:[],stream:stream,t0:Date.now(),timer:0,cancel:false,where:{kind:kind,id:tid}};
-    var r=rec;
-    mr.ondataavailable=function(e){if(e.data&&e.data.size)r.chunks.push(e.data);};
-    mr.onstop=function(){recFinish(r);};
-    mr.start(250);
-    $("#rec-time").textContent="0:00";recUI(true);
-    r.timer=setInterval(function(){var s=Math.floor((Date.now()-r.t0)/1000);var t=$("#rec-time");if(t)t.textContent=fmtDur(s);if(s>=300)recStop(false);},250);
-  }).catch(function(err){showErr("media-err",micMsg(err));});
-}
-function recStop(cancel){
-  if(!rec.on)return;
-  var r=rec;r.cancel=!!cancel;
-  try{if(r.mr.state!=="inactive")r.mr.stop();else recFinish(r);}catch(e){recFinish(r);}
-}
-function recFinish(r){
-  if(!r||r.done)return;r.done=true;
-  clearInterval(r.timer);
-  try{r.stream.getTracks().forEach(function(t){t.stop();});}catch(e){}
-  if(rec===r)rec={on:false};
-  recUI(false);
-  if(r.cancel||!r.chunks.length)return;
-  var blob=new Blob(r.chunks,{type:(r.mr&&r.mr.mimeType)||"audio/webm"});
-  saveMedia(blob,"aud",{name:"",type:blob.type,dur:Math.round((Date.now()-r.t0)/1000)},r.where);
-}
-
-/* ---------- voc (salon vocal : aperçu local) ---------- */
-var voc={on:false};
-function vocClose(silent){
-  if(!voc.on)return;
-  var v=voc;voc={on:false};
-  clearInterval(v.tick);if(v.raf)cancelAnimationFrame(v.raf);
-  try{if(v.stream)v.stream.getTracks().forEach(function(t){t.stop();});}catch(e){}
-  try{if(v.ac)v.ac.close();}catch(e){}
-  $("#voc").hidden=true;$("#voc-bar").hidden=true;document.body.classList.remove("in-voc");
-  if(!silent&&v.opener&&document.contains(v.opener))v.opener.focus();
-}
-function vocMin(){
-  if(!voc.on)return;
-  voc.min=true;$("#voc").hidden=true;$("#voc-bar").hidden=false;document.body.classList.add("in-voc");vocBarSync();
-  var b=$("#voc-bar .btn");if(b)b.focus();
-}
-function vocExpand(){
-  if(!voc.on)return;
-  voc.min=false;$("#voc-bar").hidden=true;document.body.classList.remove("in-voc");$("#voc").hidden=false;$("#voc-mute").focus();
-}
-function vocBarSync(){
-  if(!voc.on)return;
-  var t=$("#vb-t");if(t)t.innerHTML='En voc · '+esc(voc.name)+'<small>'+fmtDur((Date.now()-voc.t0)/1000)+'</small>';
-  var m=$("#vb-mute");if(m){m.setAttribute("aria-pressed",String(!!voc.muted));m.textContent=voc.muted?"Réactiver":"Couper le micro";}
-  $("#voc-bar").classList.toggle("speaking",!!voc.speaking);
-}
-function vocMute(){
-  if(!voc.on)return;
-  voc.muted=!voc.muted;
-  if(voc.stream)voc.stream.getAudioTracks().forEach(function(t){t.enabled=!voc.muted;});
-  var b=$("#voc-mute");b.setAttribute("aria-pressed",String(voc.muted));b.textContent=voc.muted?"Réactiver le micro":"Couper le micro";
-  vocRows();vocBarSync();
-}
-function vocRows(){
-  var kind=voc.kind,id=voc.tid,nm=state.me.pseudo.trim()||"Toi";
-  var me='<li class="voc-row'+(voc.speaking?' speaking':'')+'"><span class="voc-av">'+avatar(nm,"md",state.me)+'</span><span class="voc-name">'+esc(nm)+' <small>(toi)</small>'+(isPro()?' '+proBadge():'')+'</span><span class="voc-state">'+(voc.muted?"Micro coupé":(voc.noMic?"Sans micro":"Micro actif"))+'</span></li>';
-  var other="";
-  if(kind==="joueurs"){var p=playerById(id);if(p)other='<li class="voc-row away"><span class="voc-av">'+avatar(p.name,"md",p.photo?p:null)+'</span><span class="voc-name">'+esc(p.name)+(p.pro?' '+proBadge():'')+'</span><span class="voc-state">Joueur d\'exemple : n\'a pas rejoint</span></li>';}
-  else other='<li class="voc-row away"><span class="voc-name">Les autres membres sont des exemples : personne d\'autre n\'est dans la voc.</span></li>';
-  $("#voc-list").innerHTML=me+other;
-}
-function vocOpen(opener){
-  if(voc.on){vocExpand();return;}
-  var kind=kindOf(),id=active[kind];if(!id||(kind==="joueurs"&&id==="sys"))return;
-  voc={on:true,kind:kind,tid:id,name:threadName(kind,id),min:false,opener:opener||null,t0:Date.now(),muted:false,speaking:false,noMic:false,stream:null,ac:null,raf:0,tick:0};
-  var v=voc;
-  $("#voc-title").textContent="Voc"+(kind==="groupes"?" du groupe":" avec")+" "+threadName(kind,id);
-  $("#voc-sub").textContent="Salon vocal";
-  hideErr("voc-err");$("#voc-time").textContent="0:00";
-  var mb=$("#voc-mute");mb.setAttribute("aria-pressed","false");mb.textContent="Couper le micro";
-  vocRows();
-  $("#voc").hidden=false;mb.focus();
-  v.tick=setInterval(function(){var t=$("#voc-time");if(t)t.textContent=fmtDur((Date.now()-v.t0)/1000);vocBarSync();},1000);
-  if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){v.noMic=true;showErr("voc-err","Le micro n'est pas disponible ici. Tu es dans la voc, mais sans micro.");vocRows();return;}
-  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}).then(function(stream){
-    if(voc!==v){stream.getTracks().forEach(function(t){t.stop();});return;}
-    v.stream=stream;
-    try{
-      var AC=window.AudioContext||window.webkitAudioContext;v.ac=new AC();
-      var src=v.ac.createMediaStreamSource(stream),an=v.ac.createAnalyser();an.fftSize=512;src.connect(an);
-      var buf=new Uint8Array(an.fftSize);
-      (function loop(){
-        if(voc!==v)return;
-        v.raf=requestAnimationFrame(loop);
-        an.getByteTimeDomainData(buf);var s=0;for(var i=0;i<buf.length;i++){var x=(buf[i]-128)/128;s+=x*x;}
-        var sp=!v.muted&&Math.sqrt(s/buf.length)>0.035;
-        if(sp!==v.speaking){v.speaking=sp;var row=document.querySelector("#voc-list .voc-row");if(row)row.classList.toggle("speaking",sp);vocBarSync();}
-      })();
-    }catch(e){}
-  }).catch(function(err){if(voc!==v)return;v.noMic=true;showErr("voc-err",micMsg(err)+" Tu es dans la voc, mais sans micro.");vocRows();});
-}
-
 /* ---------- achat (démo) ---------- */
 var buyFor=null,buyOpener=null;
 function buyItem(kind,id){return kind==="pro"?{name:"FindMyMate Pro",price:PRO_PRICE}:(kind==="theme"?themeById(id):DECO_BY[id]);}
@@ -2783,7 +2629,7 @@ function notifPerm(){
     Promise.resolve(r).then(function(res){res=res||Notification.permission;if(s)s.textContent=res==="granted"?"Notifications système autorisées.":"Notifications système refusées ou bloquées ici. Les alertes dans le site marchent quand même.";}).catch(function(){});
   }catch(e){if(s)s.textContent="Impossible de demander l'autorisation ici.";}
 }
-var REPLIES=["Salut ! Ouais carrément, tu es dispo quand ?","Pas de souci, on lance une game ce soir ?","Ça marche, ajoute-moi et on se cale ça.","Top, j'ai un créneau vers 21h si ça te va.","Avec plaisir ! Tu as un micro ?"];
+var REPLIES=["Salut ! Ouais carrément, tu es dispo quand ?","Pas de souci, on lance une game ce soir ?","Ça marche, ajoute-moi et on se cale ça.","Top, j'ai un créneau vers 21h si ça te va.","Avec plaisir ! On se cale une game quand tu veux."];
 function scheduleReply(pid){
   if(!pid||pid==="sys"||pid.length===36||!playerById(pid))return;
   if(!playerById(pid).real){}
@@ -2803,7 +2649,6 @@ function scheduleReply(pid){
 
 /* ---------- affichage général ---------- */
 function render(){
-  if(typeof rec!=="undefined"&&rec.on)recStop(true);
   if(route==="joueur"&&!playerById(viewId))route="recherche";
   updateChrome();
   if(route==="accueil")renderHome();
@@ -2847,17 +2692,9 @@ document.addEventListener("click",function(e){
     case "deco-unequip":state.me.deco="";save();renderDecos();toast("Décoration retirée");{var ub=$('[data-action="deco-equip"][data-id="'+id+'"]');if(ub)ub.focus({preventScroll:true});}break;
     case "photo-remove":state.me.photo="";save();updateProfileHead();renderPreview();setStatus("st-photo","Photo retirée.");toast("Photo retirée");break;
     case "attach":{var mf=$("#media-file");if(mf){mf.value="";mf.click();}break;}
-    case "rec-start":recStart();break;
-    case "rec-cancel":recStop(true);break;
-    case "rec-send":recStop(false);break;
-    case "voc-open":vocOpen(el);break;
-    case "voc-close":vocClose();break;
-    case "voc-min":vocMin();break;
-    case "voc-expand":vocExpand();break;
     case "notif-open":notifOpen();break;
     case "notif-close":notifHide();break;
     case "notif-perm":notifPerm();break;
-    case "voc-mute":vocMute();break;
     case "submenu-toggle":setSub(!$("#menu-group").classList.contains("open"));break;
     case "toggle-panel":panelOpen=!panelOpen;updateSearch();break;
     case "f-game":f.game=(f.game===v)?"":v;f.ranks.clear();updateSearch();break;
@@ -3108,9 +2945,9 @@ document.addEventListener("focusout",function(e){
 });
 document.addEventListener("keydown",function(e){
   if(menuOpen&&e.key==="Escape"){e.preventDefault();setMenu(false,{focus:true});return;}
-  var ov=!$("#voc").hidden?$("#voc"):(!$("#vid").hidden?$("#vid"):(!$("#buy").hidden?$("#buy"):(!$("#dm").hidden?$("#dm"):(!$("#auth").hidden?$("#auth"):null))));
+  var ov=!$("#vid").hidden?$("#vid"):(!$("#buy").hidden?$("#buy"):(!$("#dm").hidden?$("#dm"):(!$("#auth").hidden?$("#auth"):null)));
   if(!ov)return;
-  if(e.key==="Escape"){e.preventDefault();if(ov.id==="voc")vocMin();else if(ov.id==="vid")closeVideo();else if(ov.id==="buy")closeBuy();else if(ov.id==="auth")closeAuth();else closeDM();return;}
+  if(e.key==="Escape"){e.preventDefault();if(ov.id==="vid")closeVideo();else if(ov.id==="buy")closeBuy();else if(ov.id==="auth")closeAuth();else closeDM();return;}
   if(e.key==="Tab"){
     var fs=Array.from(ov.querySelectorAll("button,textarea,input,select,video,[href]")).filter(function(x){return !x.disabled&&x.offsetParent!==null;});
     if(!fs.length)return;
