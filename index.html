@@ -1624,6 +1624,13 @@ function load(){
 }
 var state=load();
 try{var gidOk=function(x){return GROUPS.some(function(g){return g.id===x;})||state.created.some(function(c){return c.id===x;});};state.joined=state.joined.filter(gidOk);state.requested=state.requested.filter(gidOk);}catch(e){}
+/* nettoyage des anciens comptes de démo (bougers) : on garde uniquement les vrais comptes (identifiants de serveur) et la conversation d'équipe */
+try{
+  var looksUuid=function(x){return typeof x==="string"&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(x);};
+  Object.keys(state.threads).forEach(function(k){if(k!=="sys"&&!looksUuid(k))delete state.threads[k];});
+  Object.keys(state.unread).forEach(function(k){if(!looksUuid(k))delete state.unread[k];});
+  state.created.forEach(function(c){c.invited=c.invited.filter(looksUuid);c.excluded=c.excluded.filter(looksUuid);c.vps=c.vps.filter(looksUuid);});
+}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}try{queueSyncProfile();}catch(e){}}
 
 /* vidéos ajoutées par le joueur : stockées dans le navigateur (IndexedDB) */
@@ -2321,6 +2328,7 @@ function sendDM(){
 function ytId(u){var m=String(u).match(/(?:youtube\.com\/(?:watch\?[^#]*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{6,20})/i);return m?m[1]:null;}
 function directVideoUrl(u){try{return /\.(mp4|webm|ogg|ogv|mov|m4v)$/i.test(new URL(u).pathname)?u:null;}catch(e){return null;}}
 function twitchEmbed(u){
+  if(/twitch\.tv\/videos?\//i.test(String(u)))return null;
   var m=String(u).match(/^(?:https?:\/\/)?(?:www\.)?(?:clips\.)?twitch\.tv\/(?:clip\/)?([\w-]{3,60})\/?$/i);
   if(!m)return null;
   var clip=/clips\.twitch\.tv\//i.test(u)||/\/clip\//i.test(u);
