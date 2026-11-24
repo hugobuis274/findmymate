@@ -3059,7 +3059,7 @@ function refreshRealProfiles(){
     if(r.error){PROFCOUNT=-1;return;}
     PROFCOUNT=(r.data||[]).length;
     (r.data||[]).forEach(function(row){REALBY[row.id]=realFromRow(row);});
-    if(route==="recherche"||route==="messages"||route==="joueur")render();
+    if(route==="recherche"||route==="messages"||route==="joueur"||route==="groupe"||route==="messages-groupes")render();
   });
 }
 function loadMessagesOnce(){
