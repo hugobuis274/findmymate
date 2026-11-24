@@ -640,20 +640,8 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <a class="menu-item" href="#accueil" data-route="accueil" data-page="accueil"><span class="mi-title">Accueil</span><span class="mi-desc">Les explications pour bien démarrer</span></a>
       <a class="menu-item" href="#profil" data-route="profil" data-page="profil"><span class="mi-title">Mon profil</span><span class="mi-desc">Ta bio, tes jeux, ton rang, tes clips</span></a>
       <a class="menu-item" href="#recherche" data-route="recherche" data-page="recherche"><span class="mi-title">Rechercher des joueurs</span><span class="mi-desc">Filtre par jeu et par rang</span></a>
-      <div class="menu-group" id="menu-group">
-        <button type="button" class="menu-item menu-parent" id="mi-messages" data-action="submenu-toggle" aria-expanded="false" aria-controls="submenu-messages">
-          <span class="mi-title">Messages</span><span class="mi-desc">Touche la flèche : joueurs ou groupes</span>
-          <span class="badge" id="mi-badge" hidden><span id="mi-n">0</span><span class="sr"> non lus</span></span>
-          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="submenu" id="submenu-messages">
-          <div class="submenu-in">
-            <a class="menu-item sub" href="#messages" data-route="messages" data-page="messages"><span class="mi-title">Joueurs</span><span class="mi-desc">Tes DM avec les joueurs</span></a>
-            <a class="menu-item sub" href="#messages-groupes" data-route="messages-groupes" data-page="messages-groupes"><span class="mi-title">Groupes</span><span class="mi-desc">Les discussions de tes groupes</span></a>
-          </div>
-        </div>
-      </div>
-      <a class="menu-item" href="#groupes" data-route="groupes" data-page="groupes"><span class="mi-title">Recherche de groupe</span><span class="mi-desc">Trouve ou crée un groupe</span></a>
+      <a class="menu-item" href="#messages" data-route="messages" data-page="messages"><span class="mi-title">Messages</span><span class="mi-desc">Tes DM avec les joueurs</span>
+        <span class="badge" id="mi-badge" hidden><span id="mi-n">0</span><span class="sr"> non lus</span></span></a>
       <a class="menu-item" href="#themes" data-route="themes" data-page="themes"><span class="mi-title">Thèmes</span><span class="mi-desc">Change les couleurs du site</span></a>
       <a class="menu-item menu-pro" href="#pro" data-route="pro" data-page="pro"><span class="mi-title">FindMyMate Pro</span><span class="mi-desc">5 € une seule fois : tout débloqué</span></a>
     </nav>
@@ -692,7 +680,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v20</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v21</p>
   </form>
 </div>
 
@@ -1673,14 +1661,14 @@ function allGroups(){
 function addGroupThread(id,text){state.gthreads[id]=[{from:"sys",text:text,t:Date.now()}];}
 
 /* ---------- navigation ---------- */
-var ROUTES=["accueil","recherche","joueur","profil","messages","messages-groupes","groupes","themes","pro"];
+var ROUTES=["accueil","recherche","joueur","profil","messages","themes","pro"];
 var viewId=null;
 var active={joueurs:"sys",groupes:null};
 var msgsOpen=false,groupFormOpen=false,panelOpen=false,pendingDelete=null,inviteOpen=null;
 var gameEdit=null,clipFormOpen=false,draftCherche=[];
 var menuOpen=false,menuSeen=false;
 var app=$("#app");
-function parseHash(){var h=(location.hash||"").slice(1);if(ROUTES.indexOf(h)<0)return null;if(h==="joueur"&&!viewId)return null;return h;}
+function parseHash(){var h=(location.hash||"").slice(1);if(h==="messages-groupes"||h==="groupes")return "messages";/* groupes : retirés pour l'instant, on redirige vers les messages */ if(ROUTES.indexOf(h)<0)return null;if(h==="joueur"&&!viewId)return null;return h;}
 var route=parseHash()||"accueil";
 
 function setSub(open){
@@ -1825,8 +1813,7 @@ function renderHome(){
    +'<dl class="legend">'
      +'<div><dt>Mon profil</dt><dd>Ta biographie, tes jeux, ton rang, ce que tu recherches, tes clips et ton statut en ligne ou hors ligne.</dd></div>'
      +'<div><dt>Rechercher des joueurs</dt><dd>La liste des joueurs, avec des filtres par jeu et par rang.</dd></div>'
-     +'<div><dt>Messages</dt><dd>Touche la flèche pour choisir entre tes DM avec les joueurs et les discussions de groupe.</dd></div>'
-     +'<div><dt>Recherche de groupe</dt><dd>Rejoins un groupe ouvert, demande l\'accès à un groupe sur invitation ou crée le tien.</dd></div>'
+     +'<div><dt>Messages</dt><dd>Tes DM privés entre joueurs : texte et photos.</dd></div>'
      +'<div><dt>Thèmes</dt><dd>Change les couleurs du site : doré, bleu, violet, rouge, vert et d\'autres, tous gratuits. Et quatre thèmes premium animés à 0,99 € : Espace, Jungle, Sakura et Montagne. Chaque thème a aussi ses propres animations de boutons.</dd></div>'
      +'<div><dt>FindMyMate Pro</dt><dd>5 € une seule fois : les 4 thèmes premium, le badge PRO, la décoration de profil et l\'envoi de gros fichiers.</dd></div>'
    +'</dl>'
@@ -2079,10 +2066,9 @@ var lastMsgKind="";
 function renderMessages(){
   var k=kindOf(),ids=threadIds(k);
   if(lastMsgKind!==k){thq="";lastMsgKind=k;}
-  var seg='<nav class="seg" aria-label="Type de messages"><a href="#messages" data-route="messages"'+(k==="joueurs"?' aria-current="page"':'')+'>Joueurs</a><a href="#messages-groupes" data-route="messages-groupes"'+(k==="groupes"?' aria-current="page"':'')+'>Groupes</a></nav>';
-  var head='<header class="page-head"><h1>Messages</h1><p class="sub">'+(k==="groupes"?"Les discussions de tes groupes.":"Tes DM avec les autres joueurs.")+'</p>'+seg+'</header>';
+  var head='<header class="page-head"><h1>Messages</h1><p class="sub">Tes DM avec les autres joueurs. Texte et photos.</p></header>';
   if(!ids.length){
-    app.innerHTML='<section class="wrap page">'+head+(k==="groupes"?'':'<div class="searchbar th-search" role="search"><label class="sr" for="th-q">Chercher un joueur</label><input id="th-q" type="search" placeholder="Chercher un joueur" autocomplete="off" value="'+esc(thq)+'"></div><div class="tfind tfind-solo" id="tfind"></div>')+'<div class="empty"><h2>Tu n\'es dans aucun groupe</h2><p class="sub">Ici, tu ne vois que les groupes dont tu fais partie. Trouve-en un ou crée le tien dans « Recherche de groupe ».</p><button type="button" class="btn primary" data-action="goto-groups">Recherche de groupe</button></div></section>';
+    app.innerHTML='<section class="wrap page">'+head+'<div class="searchbar th-search" role="search"><label class="sr" for="th-q">Chercher un joueur</label><input id="th-q" type="search" placeholder="Chercher un joueur" autocomplete="off" value="'+esc(thq)+'"></div><div class="tfind tfind-solo" id="tfind"></div><div class="empty"><h2>Aucune conversation</h2><p class="sub">Touche « Envoyer un DM » sur le profil d’un joueur pour commencer une discussion.</p><button type="button" class="btn primary" data-action="goto-search">Rechercher des joueurs</button></div></section>';
     renderFind();
     return;
   }
@@ -2515,6 +2501,9 @@ function threadBadge(k,id){if(k!=="joueurs")return "";var p=playerById(id);retur
 function msgPreview(m){if(m&&m.media)return m.media.k==="img"?"Photo":(m.media.k==="vid"?"Vidéo":"Message vocal");return m?String(m.text||""):"";}
 function mediaHTML(m){
   var k=m.k==="img"||m.k==="vid"?m.k:"aud";
+  if(m.url){
+    return '<div class="media" data-url="'+esc(m.url)+'" data-k="img"><span class="media-ph">Chargement…</span></div><span class="media-cap">Photo</span>';
+  }
   var cap=k==="aud"?"Message vocal · "+fmtDur(m.dur):esc(m.name||(k==="img"?"Photo":"Vidéo"))+(m.size?" · "+fmtSize(m.size):"");
   return '<div class="media" data-mid="'+esc(m.id)+'" data-k="'+k+'"><span class="media-ph">Chargement…</span></div><span class="media-cap">'+cap+'</span>';
 }
@@ -2523,6 +2512,12 @@ function freeMediaUrls(){mediaUrls.forEach(function(u){try{URL.revokeObjectURL(u
 function scrollBubbles(){var b=$("#bubbles");if(b)b.scrollTop=b.scrollHeight;}
 function hydrateMedia(){
   Array.prototype.forEach.call(document.querySelectorAll("#bubbles .media"),function(box){
+    var url=box.getAttribute("data-url");
+    if(url){
+      var im2=document.createElement("img");im2.alt="Photo envoyée";im2.src=url;im2.addEventListener("load",scrollBubbles);
+      im2.addEventListener("error",function(){if(document.body.contains(box))box.innerHTML='<span class="media-ph">Photo introuvable.</span>';});
+      box.innerHTML="";box.appendChild(im2);return;
+    }
     var id=box.getAttribute("data-mid"),k=box.getAttribute("data-k");
     idbGet("m-"+id).then(function(blob){
       if(!document.body.contains(box))return;
@@ -2550,9 +2545,46 @@ function mediaPick(file){
   }
   saveMedia(file,k,{name:file.name,type:file.type});
 }
+function compressImage(file,cb){
+  try{
+    var im=new Image(),u=URL.createObjectURL(file);
+    im.onload=function(){
+      try{
+        var w=im.naturalWidth,h=im.naturalHeight;
+        if(!w||!h){URL.revokeObjectURL(u);cb(null);return;}
+        var mx=1280,sc=Math.min(1,mx/Math.max(w,h)),c=document.createElement("canvas");
+        c.width=Math.max(1,Math.round(w*sc));c.height=Math.max(1,Math.round(h*sc));
+        c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+        c.toBlob(function(b){URL.revokeObjectURL(u);cb(b||null);},"image/jpeg",0.82);
+      }catch(e){URL.revokeObjectURL(u);cb(null);}
+    };
+    im.onerror=function(){URL.revokeObjectURL(u);cb(null);};
+    im.src=u;
+  }catch(e){cb(null);}
+}
 function saveMedia(blob,k,meta,where){
   var kind=where?where.kind:kindOf(),tid=where?where.id:active[kindOf()];
   if(!tid||!store(kind)[tid])return;
+  var p=kind==="joueurs"?playerById(tid):null;
+  if(k==="img"&&p&&p.real){
+    if(!acct.user||!sb){showErr("media-err","Connecte-toi pour envoyer une photo à un joueur inscrit.");return;}
+    var doneShow=function(){if(route==="messages"&&kindOf()===kind&&active[kind]===tid){renderThreadList();renderThread();}toast("Photo envoyée");};
+    compressImage(blob,function(low){
+      var toSend=low||((/^image\//.test(blob.type))&&blob.size<2*1024*1024?blob:null);
+      if(!toSend){showErr("media-err","Impossible d'envoyer cette photo. Essaie un fichier JPG ou PNG plus petit.");return;}
+      var path="dm/"+acct.user.id+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+(low?".jpg":".png");
+      sb.storage.from("photos").upload(path,toSend,low?{contentType:"image/jpeg"}:{contentType:toSend.type||"image/png"}).then(function(up){
+        if(up.error){showErr("media-err","L'envoi de la photo a échoué : "+String(up.error.message||"erreur").slice(0,80));return;}
+        var pub=sb.storage.from("photos").getPublicUrl(path);
+        sb.from("messages").insert({sender_id:acct.user.id,recipient_id:tid,body:"",media_url:(pub&&pub.data&&pub.data.publicUrl)||""}).then(function(res){
+          if(res.error){showErr("media-err","La photo n'est pas partie : "+String(res.error.message||"erreur").slice(0,80));return;}
+          store(kind)[tid].push({from:"me",text:"",t:Date.now(),media:{k:"img",id:mediaId(),url:(pub&&pub.data&&pub.data.publicUrl)||""}});
+          save();doneShow();
+        });
+      }).catch(function(er){showErr("media-err","L'envoi de la photo a échoué : "+String(er&&er.message||"erreur").slice(0,80));});
+    });
+    return;
+  }
   var id=mediaId();
   idbPut("m-"+id,blob).then(function(){
     store(kind)[tid].push({from:"me",text:"",t:Date.now(),media:{k:k,id:id,name:String(meta.name||"").slice(0,80),type:meta.type||blob.type||"",size:blob.size,dur:meta.dur||0}});
@@ -2745,6 +2777,7 @@ document.addEventListener("click",function(e){
     case "dm-close":closeDM();break;
     case "dm-suggest":$("#dm-text").value=el.dataset.text;$("#dm-err").hidden=true;$("#dm-text").focus();break;
     case "open-thread":go("messages",{thread:id});break;
+    case "goto-search":go("recherche");break;
     case "goto-groups":go("groupes");break;
     case "thread":{
       var k=kindOf();active[k]=id;msgsOpen=true;if(k==="joueurs")markRead(id);
@@ -2880,7 +2913,21 @@ document.addEventListener("submit",function(e){
   if(id==="filter-panel"){panelOpen=false;updateSearch();$("#btn-filter").focus();return;}
   if(id==="dm-form"){sendDM();return;}
   if(id==="composer"){
-    var k=kindOf(),inp=$("#msg-input"),text=inp.value.trim();if(!text)return;
+    var k=kindOf(),inp=$("#msg-input"),text=inp.value.trim();
+    if(!text)return;
+    var tp=k==="joueurs"?playerById(active[k]):null;
+    if(tp&&tp.real){
+      if(!acct.user||!sb){openAuth(true);toast("Crée un compte gratuit pour écrire à un joueur inscrit.");return;}
+      inp.value="";
+      sb.from("messages").insert({sender_id:acct.user.id,recipient_id:tp.id,body:text}).then(function(res){
+        if(res.error){toast("Le message n'est pas parti : "+prettyAuthErr(res.error));inp.value=text;return;}
+        state.threads[tp.id].push({from:"me",text:text,t:Date.now()});
+        save();
+        if(route==="messages"&&kindOf()===k&&active[k]===tp.id){renderThreadList();renderThread();}
+        inp.focus();
+      });
+      return;
+    }
     store(k)[active[k]].push({from:"me",text:text,t:Date.now()});
     save();inp.value="";renderThreadList();renderThread();inp.focus();if(k==="joueurs")scheduleReply(active[k]);return;
   }
@@ -3079,12 +3126,13 @@ function putDbMessage(m){
   if(!state.threads[other])state.threads[other]=[];
   var th=state.threads[other],i;
   for(i=0;i<th.length;i++){if(th[i].mid===m.id)return;}
-  if(mine){
+  var media=(typeof m.media_url==="string"&&/^https?:\/\/\S+$/i.test(m.media_url))?{k:"img",id:"u"+m.id,url:m.media_url}:null;
+  if(mine&&!media){
     for(i=th.length-1;i>=0;i--){
-      if(th[i].from==="me"&&!th[i].mid&&th[i].text===m.body){th[i].mid=m.id;save();return;}
+      if(th[i].from==="me"&&!th[i].mid&&!th[i].media&&th[i].text===m.body){th[i].mid=m.id;save();return;}
     }
   }
-  th.push({from:mine?"me":"them",text:m.body,t:Date.parse(m.created_at)||Date.now(),mid:m.id});
+  th.push({from:mine?"me":"them",text:media?"":(m.body||""),t:Date.parse(m.created_at)||Date.now(),mid:m.id,media:media||undefined});
   if(!mine&&!m.read)state.unread[other]=true;
   save();
 }
