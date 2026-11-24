@@ -716,7 +716,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v14</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v15</p>
   </form>
 </div>
 
@@ -2793,7 +2793,7 @@ document.addEventListener("click",function(e){
   var act=el.dataset.action,v=el.dataset.v,id=el.dataset.id;
   switch(act){
     case "menu-toggle":setMenu(!menuOpen);break;
-    case "account":if(acct.user)signOutFlow();else{setMenu(false);openAuth(false);}break;
+    case "account":if(acct.user){if(!signoutAsk){signoutAsk=true;renderAccountMenu();clearTimeout(signoutT);signoutT=setTimeout(function(){signoutAsk=false;renderAccountMenu();},4000);}else{signoutAsk=false;clearTimeout(signoutT);setMenu(false);signOutFlow();}}else{setMenu(false);openAuth(false);}break;
     case "auth-eye":{var ap=$("#auth-pass"),show=ap.type==="password";ap.type=show?"text":"password";$("#auth-eye").textContent=show?"Masquer le mot de passe":"Afficher le mot de passe";ap.focus();break;}
     case "auth-close":closeAuth();break;
     case "open-menu":setMenu(true);break;
@@ -3106,6 +3106,7 @@ function sbInit(){
   });
 }
 function onSignedOut(oldId){
+  signoutAsk=false;clearTimeout(signoutT);
   if(acct.ch&&sb){try{sb.removeChannel(acct.ch);}catch(e){}}
   acct.ch=null;
   if(oldId)delete REALBY[oldId];
@@ -3205,11 +3206,14 @@ function syncProfileRow(){
 }
 var authModeSignup=true;
 var PROFCOUNT=null;
+var signoutAsk=false,signoutT=0;
 function openAuth(signup){
   authModeSignup=signup===true;
   authSetMode();
   var pe=$("#auth-pseudo");
   if(!pe.value&&state.me.pseudo.trim())pe.value=state.me.pseudo.trim();
+  var ae=$("#auth-email");
+  if(!ae.value){try{var le=localStorage.getItem("findmymate.email");if(le)ae.value=le;}catch(e){}}
   $("#auth-err").hidden=true;$("#auth-pass").value="";
   $("#auth").hidden=false;
   $(authModeSignup?"#auth-pseudo":"#auth-email").focus();
@@ -3256,11 +3260,13 @@ function authSubmit(){
         return bad(prettyAuthErr(res.error));
       }
       if(!res.data.session){err.textContent="Compte créé ! Vérifie ta boîte mail et clique le lien de confirmation.";err.hidden=false;return;}
+      try{localStorage.setItem("findmymate.email",email);}catch(e){}
       closeAuth();toast("Bienvenue "+pseudo+" !");
     });
   }else{
     sb.auth.signInWithPassword({email:email,password:pass}).then(function(res){
       if(res.error)return bad(prettyAuthErr(res.error));
+      try{localStorage.setItem("findmymate.email",email);}catch(e){}
       closeAuth();
       var ps=(res.data.user&&res.data.user.user_metadata&&res.data.user.user_metadata.pseudo)||state.me.pseudo.trim();
       toast("Content de te revoir"+(ps?", "+ps:"")+" !");
@@ -3274,7 +3280,7 @@ function signOutFlow(){
 function renderAccountMenu(){
   var t=$("#mi-account-title"),d=$("#mi-account-desc");
   if(!t)return;
-  if(acct.user){t.textContent="Déconnexion";d.textContent="Connecté : "+(acct.row&&acct.row.pseudo?acct.row.pseudo:((acct.user.user_metadata&&acct.user.user_metadata.pseudo)||"ton compte"));}
+  if(acct.user){t.textContent=signoutAsk?"Confirmer la déconnexion":"Déconnexion";d.textContent=signoutAsk?"Appuie encore pour te déconnecter":"Connecté : "+(acct.row&&acct.row.pseudo?acct.row.pseudo:((acct.user.user_metadata&&acct.user.user_metadata.pseudo)||"ton compte"));}
   else{t.textContent="Se connecter";d.textContent="Crée un compte gratuit pour écrire aux joueurs inscrits";}
 }
 
