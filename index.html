@@ -716,7 +716,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v13</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v14</p>
   </form>
 </div>
 
@@ -3198,7 +3198,7 @@ function syncProfileRow(){
   var m=state.me;
   var row={id:acct.user.id,pseudo:(m.pseudo.trim()||"Joueur").slice(0,24),age:String(m.age||""),bio:m.bio||"",veut:m.veut||"",games:m.games||[],cherche:m.cherche||[],photo:(m.photo||"").slice(0,399999),online:true};
   sb.from("profiles").upsert(row).then(function(res){
-    if(res.error)return;
+    if(res.error){toast("Enregistrement du profil impossible : "+String(res.error.message||"erreur").slice(0,70));return;}
     acct.row=row;REALBY[acct.user.id]=realFromRow(row);
     renderAccountMenu();
   });
