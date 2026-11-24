@@ -291,6 +291,7 @@ input::placeholder,textarea::placeholder{color:var(--encre-faible)}
 .btn.kick{min-height:38px;padding:.2rem .8rem;font-size:.85rem}
 .invite{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.6rem;padding-top:.5rem;border-top:1px solid var(--ligne)}
 .invite select{flex:1 1 12rem}
+.invite input{flex:1 1 9rem;min-height:46px;padding:.5rem .85rem;background:var(--surface);color:var(--encre);border:1px solid var(--ligne-vive);border-radius:12px}
 .grp .g-info{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .8rem;margin-top:.75rem}
 @media (max-width:560px){
   .grp{grid-template-columns:minmax(0,1fr)}
@@ -374,6 +375,8 @@ input::placeholder,textarea::placeholder{color:var(--encre-faible)}
 .clip-meta{color:var(--encre-douce);font-size:.85rem}
 .vid-sheet{width:min(48rem,100%)}
 .vid-sheet video,.vid-sheet iframe{display:block;width:100%;max-height:60vh;border-radius:12px;background:#000}
+.vid-external{margin:.6rem 0 0}
+.vid-external a[hidden]{display:none}
 .icon-btn.close{margin-left:auto}
 
 /* thèmes : couleurs (le doré est dans :root) */
@@ -689,7 +692,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v19</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v20</p>
   </form>
 </div>
 
@@ -729,6 +732,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
     </div>
     <video id="vid-el" controls playsinline preload="metadata"></video>
     <iframe id="vid-frame" title="Lecteur vidéo" hidden allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <p class="vid-external"><a class="linklike" id="vid-open" href="#" target="_blank" rel="noopener noreferrer" hidden>Ouvrir le lien dans un onglet ↗</a></p>
     <p class="err" id="vid-err" role="alert" hidden>Cette vidéo ne peut pas être lue ici.</p>
   </div>
 </div>
@@ -2209,8 +2213,10 @@ function membersPanel(g){
     rows='<li class="mrow">'+avatar(state.me.pseudo.trim()||"Toi","sm",state.me)+'<span class="mname">'+esc(state.me.pseudo.trim()||"Toi")+' (toi)</span><span class="tag chef">Président</span></li>'
       +g.invited.slice().sort(function(x,y){return (vps.indexOf(y)>=0?1:0)-(vps.indexOf(x)>=0?1:0);}).map(function(id){var p=playerById(id);return p?mrow(p,vps.indexOf(id)>=0?"vp":"member",gid,"president"):"";}).join("");
     note='<p class="hint">Tu es le président : tu peux exclure n\'importe quel membre, nommer des vice-présidents et leur retirer le badge. Les vice-présidents peuvent exclure des membres, mais pas les autres vice-présidents ni toi. Un joueur exclu ne revient que si tu le réadmets.</p>';
-    var left=PLAYERS.filter(function(p){return g.invited.indexOf(p.id)<0&&g.excluded.indexOf(p.id)<0;});
-    form=left.length?'<form class="invite" data-id="'+esc(gid)+'" novalidate><label class="sr" for="inv-sel">Joueur à ajouter</label><select id="inv-sel">'+left.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join("")+'</select><button type="submit" class="btn primary">'+(g.access==="invitation"?"Inviter":"Ajouter")+'</button></form>':'<p class="hint invite">Tous les joueurs d\'exemple sont déjà dans le groupe ou exclus.</p>';
+    var left=realList().filter(function(p){return g.invited.indexOf(p.id)<0&&g.excluded.indexOf(p.id)<0;});
+    form=left.length
+      ?'<form class="invite" data-id="'+esc(gid)+'" novalidate><label class="sr" for="inv-q">Chercher un joueur à inviter</label><input id="inv-q" type="search" placeholder="Chercher un pseudo…" autocomplete="off"><label class="sr" for="inv-sel">Joueur à ajouter</label><select id="inv-sel">'+left.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join("")+'</select><button type="submit" class="btn primary">'+(g.access==="invitation"?"Inviter":"Ajouter")+'</button></form>'
+      :'<p class="hint invite">Aucun autre joueur inscrit à ajouter pour l\'instant. Les vrais comptes inscrits sur FindMyMate apparaissent ici.</p>';
     if(g.excluded.length)ex='<h4 class="mh">Exclus</h4><ul class="mlist">'+g.excluded.map(function(id){var p=playerById(id);return p?'<li class="mrow">'+avatar(p.name,"sm",p.photo?p:null)+'<span class="mname">'+esc(p.name)+'</span><span class="mact"><button type="button" class="btn ghost kick" data-action="readmit" data-id="'+esc(gid)+'" data-pid="'+esc(p.id)+'">Réadmettre</button></span></li>':"";}).join("")+'</ul>';
   }else{
     var ge=GROUPS.find(function(x){return x.id===gid;}),chef=ge&&playerById(ge.chef),gv=(ge&&ge.vps)||[];
@@ -2314,10 +2320,18 @@ function sendDM(){
 }
 function ytId(u){var m=String(u).match(/(?:youtube\.com\/(?:watch\?[^#]*v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{6,20})/i);return m?m[1]:null;}
 function directVideoUrl(u){try{return /\.(mp4|webm|ogg|ogv|mov|m4v)$/i.test(new URL(u).pathname)?u:null;}catch(e){return null;}}
+function twitchEmbed(u){
+  var m=String(u).match(/^(?:https?:\/\/)?(?:www\.)?(?:clips\.)?twitch\.tv\/(?:clip\/)?([\w-]{3,60})\/?$/i);
+  if(!m)return null;
+  var clip=/clips\.twitch\.tv\//i.test(u)||/\/clip\//i.test(u);
+  return clip?"https://clips.twitch.tv/embed?clip="+encodeURIComponent(m[1])+"&parent=hugobuis274.github.io"
+    :"https://player.twitch.tv/?channel="+encodeURIComponent(m[1])+"&parent=hugobuis274.github.io";
+}
+function vidExtLink(on,url){var o=$("#vid-open");if(!o)return;if(on){o.hidden=false;o.setAttribute("href",url);}else{o.hidden=true;o.removeAttribute("href");}}
 var vidFrameMode=false;
 function openVideo(src,title,note,opener,revoke){
   vidOpener=opener||null;vidRevoke=revoke||null;vidFrameMode=false;
-  $("#vid-title").textContent=title;$("#vid-note").textContent=note||"";$("#vid-err").hidden=true;
+  $("#vid-title").textContent=title;$("#vid-note").textContent=note||"";$("#vid-err").hidden=true;vidExtLink(false);
   var v=$("#vid-el"),f=$("#vid-frame");
   f.removeAttribute("src");f.hidden=true;v.hidden=false;
   v.src=src;
@@ -2328,17 +2342,25 @@ function openClipUrl(url,title,opener){
   var u=safeUrl(url);
   if(!u){toast("Ce lien n'est pas valide");return;}
   vidOpener=opener||null;vidRevoke=null;
-  $("#vid-title").textContent=title||"Clip";$("#vid-note").textContent=host(u);$("#vid-err").hidden=true;
-  var v=$("#vid-el"),f=$("#vid-frame"),yt=ytId(u);
+  var v=$("#vid-el"),f=$("#vid-frame"),yt=ytId(u),dv=directVideoUrl(u),tw=twitchEmbed(u);
+  $("#vid-title").textContent=title||"Clip";
+  $("#vid-err").hidden=true;
+  vidExtLink(!(yt||dv||tw),u);
+  $("#vid-note").textContent=host(u)+((yt||dv||tw)?"":" · si rien ne s'affiche, ouvre le lien ci-dessous");
   if(yt){
     vidFrameMode=true;
     v.removeAttribute("src");try{v.load();}catch(e){}
     v.hidden=true;f.hidden=false;
     f.src="https://www.youtube-nocookie.com/embed/"+yt+"?autoplay=1&rel=0&modestbranding=1";
-  }else{
+  }else if(dv){
     vidFrameMode=false;
     f.removeAttribute("src");f.hidden=true;v.hidden=false;
-    v.src=directVideoUrl(u)||u;
+    v.src=u;
+  }else{
+    vidFrameMode=true;
+    v.removeAttribute("src");try{v.load();}catch(e){}
+    v.hidden=true;f.hidden=false;
+    f.src=tw||u;
   }
   $("#vid").hidden=false;
   $("#vid .icon-btn").focus();
@@ -2348,6 +2370,7 @@ function closeVideo(){
   try{v.pause();}catch(e){}
   v.removeAttribute("src");try{v.load();}catch(e){}
   f.removeAttribute("src");f.hidden=true;v.hidden=false;vidFrameMode=false;
+  vidExtLink(false);
   if(vidRevoke){try{URL.revokeObjectURL(vidRevoke);}catch(e){}vidRevoke=null;}
   $("#vid").hidden=true;
   var o=vidOpener;vidOpener=null;
@@ -2801,7 +2824,7 @@ document.addEventListener("click",function(e){
       var rg=state.created.find(function(c){return c.id===id;}),rp=el.getAttribute("data-pid");
       if(rg){rg.excluded=rg.excluded.filter(function(x){return x!==rp;});save();renderGroupList();toast("Joueur réadmis, tu peux l'ajouter de nouveau");}
       break;}
-    case "invite-toggle":inviteOpen=(inviteOpen===id)?null:id;renderGroupList();{var is=$("#inv-sel");if(is)is.focus({preventScroll:true});}break;
+    case "invite-toggle":inviteOpen=(inviteOpen===id)?null:id;renderGroupList();{var is=$("#inv-q");if(!is)is=$("#inv-sel");if(is)is.focus({preventScroll:true});}break;
     case "group-delete":
       if(pendingDelete===id){
         state.created=state.created.filter(function(c){return c.id!==id;});dropMedia(state.gthreads[id]);delete state.gthreads[id];
@@ -2824,6 +2847,14 @@ document.addEventListener("input",function(e){
   }
   if(id==="g-q"){gq=t.value;renderGroupList();return;}
   if(id==="th-q"){thq=t.value;if($("#thread-list"))renderThreadList();renderFind();return;}
+  if(id==="inv-q"){
+    var q=norm(t.value).trim(),sel=$("#inv-sel");
+    if(sel){var first=null;
+      Array.prototype.forEach.call(sel.options,function(o){var ok=!q||norm(o.textContent).indexOf(q)>=0;o.hidden=!ok;if(ok&&!first)first=o;});
+      if(first&&q)sel.value=first.value;else if(!q)sel.selectedIndex=0;
+    }
+    return;
+  }
   if(id==="me-bio"){$("#bio-count").textContent=t.value.length+"/280";return;}
   if(id==="gf-g"){$("#gf-r").innerHTML=rankOptions(t.value,null);return;}
 });
@@ -3012,7 +3043,7 @@ function loadAccountStuff(){
     refreshRealProfiles();
     loadMessagesOnce();
     subscribeRealtime();
-    if(!acct.rpTimer)acct.rpTimer=setInterval(refreshRealProfiles,20000);
+    if(!acct.rpTimer)acct.rpTimer=setInterval(function(){refreshRealProfiles();if(acct.user&&sb)loadMessagesOnce();},20000);
   });
 }
 function refreshRealProfiles(){
@@ -3065,8 +3096,18 @@ function subscribeRealtime(){
         if(route==="messages"&&active.joueurs===other)renderThread();
       }
     })
-    .subscribe();
+    .subscribe(function(st){
+      if(st==="CHANNEL_ERROR"||st==="TIMED_OUT"){
+        setTimeout(function(){
+          if(!acct.user)return;
+          if(acct.ch){try{acct.ch.unsubscribe();}catch(e){}acct.ch=null;}
+          subscribeRealtime();
+          loadMessagesOnce();
+        },5000);
+      }
+    });
 }
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&acct.user&&sb)loadMessagesOnce();});
 var syncT=null;
 function queueSyncProfile(){if(!acct.user||!sb)return;clearTimeout(syncT);syncT=setTimeout(syncProfileRow,900);}
 function syncProfileRow(){
