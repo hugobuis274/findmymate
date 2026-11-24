@@ -435,7 +435,7 @@ input::placeholder,textarea::placeholder{color:var(--encre-faible)}
 .pro-badge svg{width:.72rem;height:.72rem;fill:currentColor}
 h1 .pro-badge{font-size:.8rem;padding:.12rem .65rem;margin-left:.3rem}
 .th-name .pro-badge{font-size:.6rem;padding:0 .4rem}
-.menu-pro .mi-title::after{content:"5 €";margin-left:.55rem;padding:.05rem .5rem;border-radius:999px;background:var(--or);color:var(--sur-or);font:700 .72rem/1.5 var(--font-texte)}
+.menu-pro .mi-title::after{content:"XP";margin-left:.55rem;padding:.05rem .5rem;border-radius:999px;background:var(--or);color:var(--sur-or);font:700 .72rem/1.5 var(--font-texte)}
 .pban{position:relative;grid-column:1/-1;height:4.5rem;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--ligne)}
 .pban.tall{height:9rem;margin-bottom:1.25rem}
 .pban canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -618,6 +618,17 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
 .dprev-card{display:grid;justify-items:center;gap:.7rem;width:100%;min-width:0;padding:1.6rem 1.2rem;border-radius:16px;text-align:center;overflow-wrap:anywhere}
 .dprev-card p{color:var(--encre-douce);font-size:.9rem}
 .buy-demo{padding:.85rem 1rem;background:var(--surface-2);border:1px dashed var(--or-fonce);border-radius:12px;color:var(--encre-douce)}
+.xp-hero{display:flex;flex-wrap:wrap;gap:1rem;align-items:stretch;margin:1rem 0}
+.xp-hero>div>p{margin:.15rem 0 0}
+.xp-big{display:inline-block;font:700 2.2rem/1 var(--font-titre);color:var(--or)}
+.xp-chal{flex:1;min-width:14rem;background:var(--surface-2);border:1px solid var(--ligne);border-radius:12px;padding:.8rem 1rem}
+.xp-chal h2{margin:0 0 .3rem;font-size:1rem}
+.xp-chal p{margin:.25rem 0;font-size:.92rem}
+.xp-list{margin:0 0 1.2rem;padding-left:1.2rem;display:grid;gap:.3rem}
+.xp-invite{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;background:var(--surface-2);border:1px dashed var(--or-fonce);border-radius:12px;padding:.8rem 1rem;margin-bottom:1.2rem}
+.xp-invite p{margin:.1rem 0}
+.g-prev{position:relative;width:3.4rem;height:3.4rem;min-width:3.4rem;border-radius:10px;overflow:hidden;border:1px solid var(--ligne)}
+.g-prev canvas{position:absolute;inset:0;width:100%;height:100%}
 .buy-demo strong{color:var(--encre)}
 .deco-jungle{--d1:#2e9e4f;--d2:#7bd05a;--d-tl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cpath d='M0 0C34 2 58 18 66 48C40 44 18 30 0 0Z' fill='%232e9e4f'/%3E%3Cpath d='M0 0C20 14 34 36 36 66C16 54 4 34 0 0Z' fill='%231b7a34'/%3E%3Cpath d='M0 0C42 4 70 6 80 26C52 30 20 22 0 0Z' fill='%237bd05a'/%3E%3Ccircle cx='58' cy='14' r='4' fill='%23f2c94c'/%3E%3Ccircle cx='20' cy='56' r='3' fill='%23f2c94c'/%3E%3C/svg%3E");--d-br:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cg transform='rotate%28180 40 40%29'%3E%3Cpath d='M0 0C34 2 58 18 66 48C40 44 18 30 0 0Z' fill='%232e9e4f'/%3E%3Cpath d='M0 0C20 14 34 36 36 66C16 54 4 34 0 0Z' fill='%231b7a34'/%3E%3Cpath d='M0 0C42 4 70 6 80 26C52 30 20 22 0 0Z' fill='%237bd05a'/%3E%3Ccircle cx='58' cy='14' r='4' fill='%23f2c94c'/%3E%3Ccircle cx='20' cy='56' r='3' fill='%23f2c94c'/%3E%3C/g%3E%3C/svg%3E")}
 .deco-desert{--d1:#c9772b;--d2:#f2c46d;--d-tl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='20' cy='20' r='13' fill='%23ffd166'/%3E%3Cg stroke='%23f4a63a' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M20 0v-0'/%3E%3Cpath d='M44 20h10'/%3E%3Cpath d='M20 44v10'/%3E%3Cpath d='M37 37l7 7'/%3E%3Cpath d='M37 3l7-5'/%3E%3Cpath d='M3 37l-5 7'/%3E%3C/g%3E%3C/svg%3E");--d-br:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cpath d='M80 80V44C62 40 44 56 26 80Z' fill='%23e8b25a'/%3E%3Cpath d='M80 80V60C66 56 52 66 42 80Z' fill='%23c9772b'/%3E%3Cg fill='%232f7d4a'%3E%3Crect x='56' y='46' width='7' height='26' rx='3.5'/%3E%3Crect x='48' y='54' width='5' height='11' rx='2.5'/%3E%3Crect x='66' y='50' width='5' height='10' rx='2.5'/%3E%3C/g%3E%3C/svg%3E")}
@@ -646,7 +657,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <a class="menu-item" href="#messages" data-route="messages" data-page="messages"><span class="mi-title">Messages</span><span class="mi-desc">Tes DM avec les joueurs</span>
         <span class="badge" id="mi-badge" hidden><span id="mi-n">0</span><span class="sr"> non lus</span></span></a>
       <a class="menu-item" href="#themes" data-route="themes" data-page="themes"><span class="mi-title">Thèmes</span><span class="mi-desc">Change les couleurs du site</span></a>
-      <a class="menu-item menu-pro" href="#pro" data-route="pro" data-page="pro"><span class="mi-title">FindMyMate Pro</span><span class="mi-desc">5 € une seule fois : tout débloqué</span></a>
+      <a class="menu-item menu-pro" href="#boutique" data-route="boutique" data-page="boutique"><span class="mi-title">Boutique</span><span class="mi-desc">Gagne des XP et débloque thèmes, cadres et badge PRO</span></a>
     </nav>
   </div>
 </header>
@@ -683,7 +694,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v24</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v27</p>
   </form>
 </div>
 
@@ -740,10 +751,10 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       </div>
       <button type="button" class="icon-btn" data-action="buy-close" aria-label="Fermer">×</button>
     </div>
-    <p class="buy-demo"><strong>Mode démo.</strong> Le paiement réel n'est pas encore branché : aucun argent n'est débité. Pour l'instant, tu peux débloquer cet article en démo, pour le tester sur cet appareil.</p>
+    <p class="buy-demo">Les XP sont des points gagnés en jouant sur FindMyMate. Rien à payer : aucun argent, jamais, dans la boutique.</p>
     <div class="sheet-actions">
       <button type="button" class="btn ghost" data-action="buy-close">Annuler</button>
-      <button type="button" class="btn primary" id="buy-ok" data-action="buy-confirm">Débloquer en démo</button>
+      <button type="button" class="btn primary" id="buy-ok" data-action="buy-confirm">Débloquer</button>
     </div>
   </div>
 </div>
@@ -757,7 +768,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
 var SUPA_URL="https://hhqptroimcmjvyddqrtw.supabase.co";
 var SUPA_KEY="sb_publishable_p-KzoY6KWL27dLnRjiunyg_A3ZCEptt";
 var sb=null;
-var acct={user:null,row:null,ch:null,tries:0};
+var acct={user:null,row:null,ch:null,tries:0,xp:0};
 var REALBY={};
 function clipsFromRaw(arr){
   if(!Array.isArray(arr))return [];
@@ -1538,10 +1549,10 @@ var THEMES=[
   {id:"rose",name:"Rose & noir",mode:"Sombre"},
   {id:"orange",name:"Orange & noir",mode:"Sombre"},
   {id:"turquoise",name:"Turquoise & blanc",mode:"Clair"},
-  {id:"espace",name:"Espace",mode:"Sombre",price:99,art:"Galaxie, planète, étoiles filantes et satellites animés"},
-  {id:"jungle",name:"Jungle",mode:"Sombre",price:99,art:"Forêt dense, lucioles, papillons et oiseaux animés"},
-  {id:"sakura",name:"Sakura",mode:"Clair",price:99,art:"Cerisiers en fleurs, pétales qui tombent, pagode et mont lointain"},
-  {id:"montagne",name:"Montagne",mode:"Sombre",price:99,art:"Sommets enneigés, aurore, neige qui tombe et lac"}
+  {id:"espace",name:"Espace",mode:"Sombre",price:300,art:"Galaxie, planète, étoiles filantes et satellites animés"},
+  {id:"jungle",name:"Jungle",mode:"Sombre",price:300,art:"Forêt dense, lucioles, papillons et oiseaux animés"},
+  {id:"sakura",name:"Sakura",mode:"Clair",price:300,art:"Cerisiers en fleurs, pétales qui tombent, pagode et mont lointain"},
+  {id:"montagne",name:"Montagne",mode:"Sombre",price:300,art:"Sommets enneigés, aurore, neige qui tombe et lac"}
 ];
 function themeById(id){return THEMES.find(function(t){return t.id===id;});}
 function applyTheme(id){var t=themeById(id),ok=t&&(!t.price||(typeof state!=="undefined"&&state&&ownsTheme(id)));var fin=ok?id:"dore";try{var de=document.documentElement;de.setAttribute("data-theme",fin);if(isArtTheme(fin))de.setAttribute("data-art",fin);else de.removeAttribute("data-art");}catch(e){}try{if(typeof Art!=="undefined")Art.apply(fin);if(typeof MenuFx!=="undefined"&&!menuOpen)MenuFx.reset();}catch(e){}}
@@ -1566,7 +1577,7 @@ var DECO_ART={
   desert:'<svg class="frame-art" viewBox="0 0 100 100" aria-hidden="true"><g stroke="#f4a63a" stroke-width="2.5" stroke-linecap="round"><path d="M86 -4v4"/><path d="M98 2l-3 3"/><path d="M104 14h-4"/><path d="M74 2l3 3"/></g><circle cx="86" cy="14" r="9" fill="#ffd166"/><g fill="#2f7d4a"><rect x="6" y="70" width="7" height="26" rx="3.5"/><rect x="-1" y="77" width="5" height="11" rx="2.5"/><rect x="15" y="73" width="5" height="10" rx="2.5"/></g><path d="M102 102V86C90 83 78 91 68 102Z" fill="#e8b25a"/></svg>',
   foret:'<svg class="frame-art" viewBox="0 0 100 100" aria-hidden="true"><g fill="#2d6a4f"><path d="M12 -8L24 18H0Z"/><path d="M38 -10L52 20H24Z"/><path d="M64 -6L74 16H54Z"/></g><g fill="#40916c"><path d="M12 2L20 18H4Z"/><path d="M38 0L48 20H28Z"/></g><path d="M78 100a11 9 0 0 1 22 0Z" fill="#c8553d"/><circle cx="85" cy="93" r="1.8" fill="#fff"/><circle cx="92" cy="91" r="1.5" fill="#fff"/></svg>'
 };
-function eur(c){return c%100?(c/100).toFixed(2).replace(".",",")+" €":(c/100)+" €";}
+function eur(c){return ""+c+" XP";}
 
 
 /* ---------- état enregistré dans ce navigateur ---------- */
@@ -1664,14 +1675,14 @@ function allGroups(){
 function addGroupThread(id,text){state.gthreads[id]=[{from:"sys",text:text,t:Date.now()}];}
 
 /* ---------- navigation ---------- */
-var ROUTES=["accueil","recherche","joueur","profil","messages","themes","pro"];
+var ROUTES=["accueil","recherche","joueur","profil","messages","themes","boutique"];
 var viewId=null;
 var active={joueurs:"sys",groupes:null};
 var msgsOpen=false,groupFormOpen=false,panelOpen=false,pendingDelete=null,inviteOpen=null;
 var gameEdit=null,clipFormOpen=false,draftCherche=[];
 var menuOpen=false,menuSeen=false;
 var app=$("#app");
-function parseHash(){var h=(location.hash||"").slice(1);if(h==="messages-groupes"||h==="groupes")return "messages";/* groupes : retirés pour l'instant, on redirige vers les messages */ if(ROUTES.indexOf(h)<0)return null;if(h==="joueur"&&!viewId)return null;return h;}
+function parseHash(){var h=(location.hash||"").slice(1);if(h==="messages-groupes"||h==="groupes")return "messages";/* groupes : retirés pour l'instant, on redirige vers les messages */ if(h==="pro")return "boutique";/* FindMyMate Pro devient la Boutique (XP) */ if(ROUTES.indexOf(h)<0)return null;if(h==="joueur"&&!viewId)return null;return h;}
 var route=parseHash()||"accueil";
 
 function setSub(open){
@@ -1804,7 +1815,7 @@ function renderHome(){
      +'<p class="lead-text">FindMyMate te met en contact avec des joueurs de Fortnite, Warzone, Valorant et Minecraft. Choisis ton jeu et ton rang, regarde leurs clips de gameplay, puis envoie un DM.</p></header>'
    +'<div class="menu-callout" role="note">'
      +'<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 36 36 12"/><path d="M17 12h19v19"/></svg>'
-     +'<div><h2>Tout se passe dans le menu</h2><p>Touche le bouton <strong>Menu</strong> en haut à droite de l\'écran. Tu y trouves ton profil, la recherche de joueurs, tes messages, les thèmes et FindMyMate Pro.</p></div>'
+     +'<div><h2>Tout se passe dans le menu</h2><p>Touche le bouton <strong>Menu</strong> en haut à droite de l\'écran. Tu y trouves ton profil, la recherche de joueurs, tes messages, les thèmes et la boutique.</p></div>'
      +'<button type="button" class="btn primary" data-action="open-menu">Ouvrir le menu</button>'
    +'</div>'
    +'<h2 class="section-title">Comment ça marche</h2>'
@@ -1818,8 +1829,8 @@ function renderHome(){
      +'<div><dt>Mon profil</dt><dd>Ta biographie, tes jeux, ton rang, ce que tu recherches, tes clips et ton statut en ligne ou hors ligne.</dd></div>'
      +'<div><dt>Rechercher des joueurs</dt><dd>La liste des joueurs, avec des filtres par jeu et par rang.</dd></div>'
      +'<div><dt>Messages</dt><dd>Tes DM privés entre joueurs : texte et photos.</dd></div>'
-     +'<div><dt>Thèmes</dt><dd>Change les couleurs du site : doré, bleu, violet, rouge, vert et d\'autres, tous gratuits. Et quatre thèmes premium animés à 0,99 € : Espace, Jungle, Sakura et Montagne. Chaque thème a aussi ses propres animations de boutons.</dd></div>'
-     +'<div><dt>FindMyMate Pro</dt><dd>5 € une seule fois : les 4 thèmes premium, le badge PRO, la décoration de profil et l\'envoi de gros fichiers.</dd></div>'
+     +'<div><dt>Thèmes</dt><dd>Change les couleurs du site : doré, bleu, violet, rouge, vert et d\'autres, tous gratuits. Et quatre thèmes premium animés à débloquer avec des XP (300 XP chacun) : Espace, Jungle, Sakura et Montagne.</dd></div>'
+     +'<div><dt>Boutique</dt><dd>Gagne des XP en te connectant (20 min par jour), en invitant des potes et en complétant ton profil. Débloque les thèmes premium, les cadres de profil et le badge PRO.</dd></div>'
    +'</dl>'
    +'<p class="hint">Les profils ici sont des vrais comptes inscrits. Un compte est aussi demandé pour t\'écrire.</p>'
    +'</section>';
@@ -2089,7 +2100,7 @@ function renderMessages(){
          +''
          +'<label class="sr" for="msg-input">Ton message</label><input id="msg-input" maxlength="500" autocomplete="off" enterkeyhint="send" placeholder="Écris ton message"><button type="submit" class="btn primary">Envoyer</button>'
          +'<input type="file" id="media-file" accept="image/*,video/*" hidden></form>'
-              +'<p class="err media-err" id="media-err" role="alert" hidden></p><a class="media-pro" id="media-pro" href="#pro" data-route="pro" hidden>Découvrir FindMyMate Pro</a>'
+              +'<p class="err media-err" id="media-err" role="alert" hidden></p><a class="media-pro" id="media-pro" href="#boutique" data-route="boutique" hidden>Gagne des XP dans la boutique</a>'
        +'<p class="readonly" id="readonly" hidden>Ce message vient de l\'équipe FindMyMate, tu ne peux pas y répondre.</p>'
      +'</section></div></section>';
   if(k==="joueurs"&&(!isNarrow()||msgsOpen))markRead(active.joueurs);
@@ -2298,6 +2309,7 @@ function sendDM(){
       dmOpener=null;
       $("#dm").hidden=true;dmFor=null;
       toast("Message envoyé à "+p.name);
+      try{xpAward("dm",5,25);}catch(e){}
       if(route==="recherche")renderResults();
       else if(route==="joueur")renderPlayer();
       else if(route==="messages"&&$("#thread-list")){renderThreadList();renderFind();}
@@ -2412,8 +2424,8 @@ function renderThemes(){
     +'<header class="page-head"><h1>Thèmes</h1><p class="sub">Choisis l\'apparence du site. Ton choix est gardé sur cet appareil.</p></header>'
     +'<div class="shop-h"><h2>Gratuits</h2><p>Pour tout le monde.</p></div>'
     +'<div class="themes">'+free+'</div>'
-    +'<div class="shop-h"><h2>Premium</h2><p>Des thèmes animés, <span class="price">'+eur(99)+'</span> chacun, ou les deux avec <a href="#pro" data-route="pro">FindMyMate Pro</a>.</p></div>'
-    +'<div class="shop-note"><span><strong>Boutique en mode démo.</strong> Le paiement réel n\'est pas encore branché : aucun argent n\'est débité. Les achats se débloquent en démo, sur cet appareil.</span></div>'
+    +'<div class="shop-h"><h2>Premium</h2><p>Des thèmes animés à débloquer avec tes XP, <span class="price">'+eur(300)+'</span> chacun — ou tout d\'un coup avec le <a href="#boutique" data-route="boutique">Pack ULTIME</a>.</p></div>'
+    +'<div class="shop-note"><span><strong>Tes XP</strong> se gagnent en jouant : 20 min par jour, série de 7 jours, invitations et profil complet. Voir la <a href="#boutique" data-route="boutique">boutique</a>.</span></div>'
     +'<div class="themes">'+prem+'</div>'
     +'<div class="shop-h"><h2>Effets et animations</h2><p>Allume ou éteins ce que tu veux, ça marche avec tous les thèmes.</p></div>'
     +'<div class="card-form fx-opts" id="fx-opts">'+fxOptsHTML()+'<div class="fx-perm"><button type="button" class="btn ghost" data-action="notif-perm">Autoriser les notifications du navigateur</button><p class="hint" id="notif-perm-st" role="status">Pour être prévenu même quand le site est en arrière-plan (selon ton appareil).</p></div></div></section>';
@@ -2444,12 +2456,12 @@ function renderDecos(){
   app.innerHTML='<section class="wrap page">'
     +'<header class="page-head"><h1>Décorations</h1><p class="sub">Décore ta photo de profil et ta biographie. Une seule décoration à la fois. La photo de profil, elle, est gratuite : ajoute-la dans Mon profil.</p></header>'
     +'<div class="shop-h"><h2>Décorations de profil</h2><p><span class="price">'+eur(500)+'</span> chacune</p></div>'
-    +'<div class="shop-note"><span><strong>Boutique en mode démo.</strong> Le paiement réel n\'est pas encore branché : aucun argent n\'est débité. Les achats se débloquent en démo, sur cet appareil.</span></div>'
+    +'<div class="shop-note"><span><strong>Tes XP</strong> se gagnent en jouant : 20 min par jour, série de 7 jours, invitations et profil complet. Voir la <a href="#boutique" data-route="boutique">boutique</a>.</span></div>'
     +'<div class="themes">'+cards+'</div></section>';
 }
 
 /* ---------- FindMyMate Pro ---------- */
-var PRO_PRICE=500;
+var PRO_PRICE=1000;
 var MB=1048576;
 var LIM={free:{img:10*MB,vid:50*MB},pro:{img:100*MB,vid:2048*MB}};
 function isPro(){return typeof state!=="undefined"&&!!state&&state.pro===true;}
@@ -2472,32 +2484,134 @@ function ptFormHTML(){
     +'<p>Habille tout ton profil (ta carte et ta page) avec un thème animé que tu possèdes.</p>'
     +'<div class="radios" role="radiogroup" aria-label="Décoration du profil">'
     +opts.map(function(o){var ok=o.ok!==false;return '<label class="radio'+(ok?'':' locked')+'"><input type="radio" name="me-ptheme" value="'+o.id+'"'+(o.id===cur?' checked':'')+(ok?'':' disabled')+'><span><strong>'+esc(o.name)+'</strong><small>'+esc(o.small)+'</small></span></label>';}).join("")
-    +'</div>'+(locked?'<p class="hint"><a href="#themes" data-route="themes">Voir les thèmes</a> ou <a href="#pro" data-route="pro">FindMyMate Pro</a>.</p>':'')
+    +'</div>'+(locked?'<p class="hint"><a href="#themes" data-route="themes">Voir les thèmes</a> ou <a href="#boutique" data-route="boutique">La boutique</a>.</p>':'')
     +'<p class="err" id="err-ptheme" role="alert" hidden></p>'
     +'<div class="form-foot"><button type="submit" class="btn primary">Valider</button><p class="status" id="st-ptheme" role="status"></p></div></form>';
 }
 function renderPro(){
-  var own=isPro();
-  var rows=[
-    ["Les 4 thèmes animés (Espace, Jungle, Sakura, Montagne)","0,99 € chacun","Tous inclus"],
-    ["Badge PRO à côté de ton pseudo","Non","Oui"],
-    ["Profil entier habillé en thème animé","Avec chaque thème acheté","Les 4 thèmes"],
-    ["Photo envoyée en message","10 Mo maximum","100 Mo maximum"],
-    ["Vidéo envoyée en message","50 Mo maximum","2 Go maximum"],
-    ["Profil, recherche, DM, groupes, photo de profil","Oui","Oui"]
-  ];
+  var bal=acctXp();
+  var today=xpDayStr(new Date());
+  var minOk=XPSTORE.days[today]===true;
+  var secs=(XPSTORE.today&&XPSTORE.today.d===today)?XPSTORE.today.s:0;
+  var minRest=Math.max(0,Math.ceil((1200-secs)/60));
+  var serie=xpStreakLen();
+  var rowTheme=function(t){var w=ownsTheme(t.id);
+    return '<div class="frow"><div class="g-prev"><canvas class="pbg" data-art="'+t.id+'" aria-hidden="true"></canvas></div><div><strong>'+esc(t.name)+'</strong><small>'+esc(t.art)+'</small></div>'
+      +'<div class="g-act">'+(w?'<span class="tag me">Acquis</span>':'<button type="button" class="btn" data-action="buy" data-kind="theme" data-id="'+t.id+'">'+eur(t.price)+'</button>')+'</div></div>';};
+  var rowDeco=function(d){var w=state.owned.decos.indexOf(d.id)>=0;
+    return '<div class="frow"><div class="g-prev deco deco-'+d.id+'"><span class="sr">Cadre '+esc(d.name)+'</span></div><div><strong>Cadre '+esc(d.name)+'</strong><small>'+esc(d.desc)+'</small></div>'
+      +'<div class="g-act">'+(w?'<span class="tag me">Acquis</span>':'<button type="button" class="btn" data-action="buy" data-kind="deco" data-id="'+d.id+'">'+eur(d.price)+'</button>')+'</div></div>';};
+  var themes=THEMES.filter(function(t){return t.price;});
+  var packFull=packOwns();
   app.innerHTML='<section class="wrap page pro-page">'
-    +'<header class="page-head"><h1>FindMyMate Pro</h1><p class="sub">L\'application en pro. Tu paies une seule fois, il n\'y a pas d\'abonnement.</p></header>'
-    +'<div class="pro-hero"><div class="pro-priceblock"><span class="pro-price">'+eur(PRO_PRICE)+'</span><span class="pro-once">une seule fois</span></div>'
-      +'<ul class="pro-list"><li>Les 4 thèmes animés : <strong>Espace</strong>, <strong>Jungle</strong>, <strong>Sakura</strong> et <strong>Montagne</strong></li><li>Le badge <strong>PRO</strong> à côté de ton pseudo</li><li>La décoration animée de ton profil</li><li>Des photos jusqu\'à <strong>100 Mo</strong> et des vidéos jusqu\'à <strong>2 Go</strong> dans les messages</li></ul>'
-      +(own?'<div class="pro-own"><p>'+proBadge()+' Tu as FindMyMate Pro. Merci !</p><div class="pro-own-btns"><a class="btn ghost" href="#themes" data-route="themes">Mes thèmes</a><a class="btn ghost" href="#profil" data-route="profil">Décorer mon profil</a></div></div>'
-        :'<button type="button" class="btn primary pro-buy" data-action="buy" data-kind="pro" data-id="pro">Acheter FindMyMate Pro, '+eur(PRO_PRICE)+'</button>')
+    +'<header class="page-head"><h1>Boutique</h1><p class="sub">Gagne des XP en jouant, d\u00e9bloque des articles. Rien d\'argent r\u00e9el : ici, on paie seulement avec des points.</p></header>'
+    +'<div class="xp-hero"><div><span class="xp-big" id="xp-solde">'+bal+' XP</span><p class="sub">Ton solde</p></div>'
+      +'<div class="xp-chal"><h2>D\u00e9fi du jour</h2>'
+        +'<p>'+(minOk?'\u2705 Journ\u00e9e valid\u00e9e ! +10 XP gagn\u00e9s.':'Reste connect\u00e9 encore <strong>'+minRest+' min</strong> aujourd\'hui (20 min) pour gagner <strong>+10 XP</strong>.')+'</p>'
+        +'<p><strong>S\u00e9rie : '+serie+' jour'+(serie>1?'s':'')+' d\'affil\u00e9e.</strong> 7 jours d\'affil\u00e9e = <strong>+200 XP</strong> ! Jour rat\u00e9 = tu re\u00e7ois juste une part au prorata.</p>'
+      +'</div>'
     +'</div>'
-    +'<div class="shop-note"><span><strong>Boutique en mode démo.</strong> Le paiement réel n\'est pas encore branché : aucun argent n\'est débité. Pro se débloque en démo, sur cet appareil.</span></div>'
-    +'<h2 class="section-title">Gratuit ou Pro</h2>'
-    +'<div class="cmp-wrap"><table class="cmp"><caption class="sr">Ce qui change entre la version gratuite et FindMyMate Pro</caption><thead><tr><th scope="col">Ce que tu peux faire</th><th scope="col">Gratuit</th><th scope="col">Pro</th></tr></thead><tbody>'
-    +rows.map(function(r){return '<tr><th scope="row">'+esc(r[0])+'</th><td>'+esc(r[1])+'</td><td class="pro-col">'+esc(r[2])+'</td></tr>';}).join("")
-    +'</tbody></table></div></section>';
+    +'<h2 class="section-title">Comment gagner des XP</h2>'
+    +'<ul class="xp-list">'
+      +'<li><strong>+50 XP</strong> quand ton profil est complet (pseudo, bio, 1 jeu avec rang et photo)</li>'
+      +'<li><strong>+10 XP</strong> chaque jour o\u00f9 tu restes 20 min sur le site</li>'
+      +'<li><strong>+200 XP</strong> quand tu tiens 7 jours d\'affil\u00e9e (au prorata si tu rat\u00e9s des jours)</li>'
+      +'<li><strong>+5 XP</strong> quand tu \u00e9cris \u00e0 un nouveau joueur</li>'
+      +'<li><strong>+200 XP</strong> quand un pote cr\u00e9e son compte avec ton lien d\'invitation</li>'
+    +'</ul>'
+    +'<div class="xp-invite"><div><strong>Inviter un pote (+200 XP)</strong><p class="sub">Il cr\u00e9e son compte avec ton lien, tu encaisses 200 XP d\'un coup.</p></div>'
+      +'<button type="button" class="btn primary" data-action="xp-invite">Copier mon lien d\'invitation</button></div>'
+    +'<h2 class="section-title">Pack ULTIME</h2>'
+    +'<div class="pro-hero"><div class="pro-priceblock"><span class="pro-price">'+eur(PACK_PRICE)+'</span><span class="pro-once">au lieu de 2700 XP : \u221230 %</span></div>'
+      +'<ul class="pro-list"><li>Le badge <strong>PRO</strong> (1000 XP seul)</li><li>Les 3 <strong>cadres de profil</strong> (500 XP chacun)</li><li>Les 4 th\u00e8mes anim\u00e9s : <strong>Espace</strong>, <strong>Jungle</strong>, <strong>Sakura</strong>, <strong>Montagne</strong> (300 XP chacun)</li></ul>'
+      +(packFull?'<div class="pro-own"><p>\u2714 Tu as le Pack ULTIME. Chapeau !</p></div>':'<button type="button" class="btn primary pro-buy" data-action="buy" data-kind="pack" data-id="pack">D\u00e9bloquer le Pack ULTIME, '+eur(PACK_PRICE)+'</button>')
+    +'</div>'
+    +'<h2 class="section-title">Badge PRO</h2>'
+    +'<div class="frow"><div>'+proBadge()+'</div><div><strong>Badge PRO</strong><small>\u00c0 c\u00f4t\u00e9 de ton pseudo partout sur le site.</small></div>'
+      +'<div class="g-act">'+(isPro()?'<span class="tag me">Acquis</span>':'<button type="button" class="btn" data-action="buy" data-kind="pro" data-id="pro">'+eur(PRO_PRICE)+'</button>')+'</div></div>'
+    +'<h2 class="section-title">Cadres de profil</h2>'
+    +DECOS.map(rowDeco).join("")
+    +'<h2 class="section-title">Th\u00e8mes premium</h2>'
+    +themes.map(rowTheme).join("")
+    +'<p class="hint">D\u00e9j\u00e0 d\u00e9bloqu\u00e9 quelque chose ? \u00c7a reste sur ton compte, m\u00eame sur un autre appareil, d\u00e8s que le serveur a enregistr\u00e9 l\'achat.</p>'
+    +'</section>';
+  try{drawArtCanvases();}catch(e){}
+}
+
+/* ---------- XP : le moteur ---------- */
+function acctXp(){return typeof acct.xp==="number"?acct.xp:0;}
+var XPSTORE={days:{},runs:{},today:null};
+try{var _xps=JSON.parse(localStorage.getItem("findmymate.xp")||"{}");if(_xps&&typeof _xps==="object"){if(_xps.days)XPSTORE.days=_xps.days;if(_xps.runs)XPSTORE.runs=_xps.runs;if(_xps.today)XPSTORE.today=_xps.today;}}catch(e){}
+function xpSaveStore(){try{localStorage.setItem("findmymate.xp",JSON.stringify({days:XPSTORE.days,runs:XPSTORE.runs,today:XPSTORE.today}));}catch(e){}}
+function xpDayStr(d){function p2(n){return (n<10?"0":"")+n;}return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate());}
+function xpRefreshChrome(){renderAccountMenu();var el=$(".xp-big");if(el)el.textContent=acctXp()+" XP";}
+function xpAward(key,amount,cap,msg){
+  if(!acct.user||!sb)return;
+  sb.rpc("award_xp",{p_key:String(key||"").slice(0,60),p_amount:Math.max(1,Math.round(amount)),p_cap:cap}).then(function(r){
+    if(r.error){return;}
+    if(typeof r.data==="number"&&r.data!==acct.xp){acct.xp=r.data;xpRefreshChrome();}
+    if(msg)toast(msg);
+  });
+}
+function xpSpend(cost,item,ok){
+  if(!acct.user||!sb){openAuth(true);toast("Connecte-toi (ou cr\u00e9e un compte) pour gagner et d\u00e9penser des XP.");return;}
+  sb.rpc("spend_xp",{p_item:String(item||"").slice(0,60),p_cost:Math.round(cost)}).then(function(r){
+    if(r.error){toast("Achat impossible : "+String(r.error.message||"erreur").slice(0,60));return;}
+    if(r.data===null||r.data===undefined){toast("Pas assez d'XP : il te manque "+Math.max(0,cost-acctXp())+" XP. Reviens jouer chaque jour !");return;}
+    acct.xp=r.data;xpRefreshChrome();
+    if(ok)ok();
+  });
+}
+function xpStreakLen(){
+  var s=0;
+  for(var i=0;i<400;i++){var d=new Date();d.setDate(d.getDate()-i);if(XPSTORE.days[xpDayStr(d)])s++;else break;}
+  return s;
+}
+function xpCheckStreak(){
+  var s=xpStreakLen();if(s<3)return;
+  var first=new Date();first.setDate(first.getDate()-(s-1));
+  var key="run-"+xpDayStr(first);
+  if(XPSTORE.runs[key])return;
+  var amt=s>=7?200:Math.round(200*s/7);
+  if(amt<20)return;
+  XPSTORE.runs[key]=amt;xpSaveStore();
+  xpAward(key,amt,-1,"+"+amt+" XP : s\u00e9rie de "+s+" jours !");
+}
+function xpTick(){
+  if(!acct.user||!sb)return;
+  var today=xpDayStr(new Date());
+  if(!XPSTORE.today||XPSTORE.today.d!==today){XPSTORE.today={d:today,s:0};}
+  if(document.visibilityState!=="visible")return;
+  XPSTORE.today.s+=15;xpSaveStore();
+  if(XPSTORE.today.s>=1200)xpValidateDay();
+}
+function xpValidateDay(){
+  var today=xpDayStr(new Date());
+  if(XPSTORE.days[today])return;
+  XPSTORE.days[today]=true;xpSaveStore();
+  xpAward("jour",10,10,"+10 XP : 20 minutes jou\u00e9es aujourd'hui !");
+  xpCheckStreak();
+}
+function xpStartEngine(){
+  if(acct.xpTimer)return;
+  acct.xpTimer=setInterval(xpTick,15000);
+  xpAward("compte",50,-1);
+  xpCheckStreak();
+}
+function xpInviteLink(){
+  var base=location.origin+location.pathname;
+  return base+"?ref="+acct.user.id;
+}
+function packOwns(){return isPro()&&ownsTheme("espace")&&ownsTheme("jungle")&&ownsTheme("sakura")&&ownsTheme("montagne")&&DECOS.every(function(d){return state.owned.decos.indexOf(d.id)>=0;});}
+function xpApplyOwnedFromRow(row){
+  if(!row)return;
+  var kk=(row.xp_keys&&typeof row.xp_keys==="object")?row.xp_keys:{};
+  function owns(k){return kk[k]===true;}
+  if(owns("item:pack")){state.pro=true;["espace","jungle","sakura","montagne"].forEach(function(x){if(state.owned.themes.indexOf(x)<0)state.owned.themes.push(x);});DECOS.forEach(function(d){if(state.owned.decos.indexOf(d.id)<0)state.owned.decos.push(d.id);});}
+  if(owns("item:pro"))state.pro=true;
+  THEMES.forEach(function(t){if(t.price&&owns("item:theme:"+t.id)&&state.owned.themes.indexOf(t.id)<0)state.owned.themes.push(t.id);});
+  DECOS.forEach(function(d){if(owns("item:deco:"+d.id)&&state.owned.decos.indexOf(d.id)<0)state.owned.decos.push(d.id);});
+  if(typeof row.xp==="number"&&row.xp>acct.xp)acct.xp=row.xp;
 }
 
 /* ---------- messages : photos, vidéos ---------- */
@@ -2598,14 +2712,18 @@ function saveMedia(blob,k,meta,where){
 }
 /* ---------- achat (démo) ---------- */
 var buyFor=null,buyOpener=null;
-function buyItem(kind,id){return kind==="pro"?{name:"FindMyMate Pro",price:PRO_PRICE}:(kind==="theme"?themeById(id):DECO_BY[id]);}
+var PACK_PRICE=1890;
+function buyItem(kind,id){return kind==="pack"?{name:"Pack ULTIME",price:PACK_PRICE}:(kind==="pro"?{name:"Badge PRO",price:PRO_PRICE}:(kind==="theme"?themeById(id):DECO_BY[id]));}
 function openBuy(kind,id,opener){
   var it=buyItem(kind,id);if(!it)return;
+  if(kind==="pack")return packOwns()?toast("Tu as déjà le pack ULTIME !"):(buyFor={kind:kind,id:id},$("#buy-title").textContent="Pack ULTIME : badge + cadre + les 4 thèmes",$("#buy-sub").textContent=eur(it.price)+" au lieu de 2700 XP (économise 810 XP)",$("#buy").hidden=false,void $("#buy-ok").focus());
+  var d=buyItem2(kind,id);if(d)return toast("Tu as déjà "+it.name+" !");
   buyFor={kind:kind,id:id};buyOpener=opener||null;
-  $("#buy-title").textContent=kind==="pro"?"FindMyMate Pro":(kind==="theme"?"Thème « ":"Décoration « ")+it.name+" »";
-  $("#buy-sub").textContent=kind==="pro"?eur(it.price)+", une seule fois, sans abonnement":eur(it.price)+(kind==="deco"?", pour ta photo de profil et ta biographie":", apparence du site");
+  $("#buy-title").textContent=kind==="pro"?"Badge PRO":(kind==="theme"?"Thème « ":"Décoration « ")+it.name+" »";
+  $("#buy-sub").textContent=eur(it.price)+(kind==="deco"?", autour de ta photo et de ta biographie":", apparence du site");
   $("#buy").hidden=false;$("#buy-ok").focus();
 }
+function buyItem2(kind,id){return kind==="pro"?isPro():(kind==="theme"?ownsTheme(id):state.owned.decos.indexOf(id)>=0);}
 function closeBuy(){
   $("#buy").hidden=true;
   var o=buyOpener;buyFor=null;buyOpener=null;
@@ -2614,19 +2732,18 @@ function closeBuy(){
 function confirmBuy(){
   var b=buyFor;if(!b)return;
   var it=buyItem(b.kind,b.id);if(!it)return;
-  if(b.kind==="pro"){
-    state.pro=true;save();buyOpener=null;buyFor=null;$("#buy").hidden=true;
-    renderPro();updateChrome();toast("FindMyMate Pro débloqué en démo. Merci !");
-    var ph=$("#app h1");if(ph){ph.setAttribute("tabindex","-1");ph.focus({preventScroll:true});}
-    return;
-  }
-  if(b.kind==="theme"){if(state.owned.themes.indexOf(b.id)<0)state.owned.themes.push(b.id);state.theme=b.id;applyTheme(b.id);}
-  else{if(state.owned.decos.indexOf(b.id)<0)state.owned.decos.push(b.id);state.me.deco=b.id;}
-  save();
-  buyOpener=null;buyFor=null;$("#buy").hidden=true;
-  if(b.kind==="theme")renderThemes();else renderDecos();
-  toast("« "+it.name+" » débloqué en démo et activé");
-  var nb=$('[data-action="'+(b.kind==="theme"?"theme-set":"deco-unequip")+'"][data-id="'+b.id+'"]');if(nb)nb.focus({preventScroll:true});
+  var item=b.kind==="pack"?"item:pack":(b.kind==="pro"?"item:pro":(b.kind==="theme"?"item:theme:"+b.id:"item:deco:"+b.id));
+  xpSpend(it.price,item,function(){
+    if(b.kind==="pack"){state.pro=true;["espace","jungle","sakura","montagne"].forEach(function(x){if(state.owned.themes.indexOf(x)<0)state.owned.themes.push(x);});DECOS.forEach(function(d){if(state.owned.decos.indexOf(d.id)<0)state.owned.decos.push(d.id);});}
+    else if(b.kind==="pro"){state.pro=true;}
+    else if(b.kind==="theme"){if(state.owned.themes.indexOf(b.id)<0)state.owned.themes.push(b.id);state.theme=b.id;applyTheme(b.id);}
+    else{if(state.owned.decos.indexOf(b.id)<0)state.owned.decos.push(b.id);state.me.deco=b.id;}
+    save();
+    buyOpener=null;buyFor=null;$("#buy").hidden=true;
+    if(route==="boutique")renderPro();else if(b.kind==="theme")renderThemes();else renderDecos();
+    toast("« "+it.name+" » débloqué ! Il te reste "+acctXp()+" XP");
+    var nb=$('[data-action="'+(b.kind==="theme"?"theme-set":"deco-unequip")+'"][data-id="'+b.id+'"]');if(nb)nb.focus({preventScroll:true});
+  });
 }
 
 /* ---------- photo de profil ---------- */
@@ -2724,7 +2841,7 @@ function render(){
   else if(route==="profil")renderProfile();
   else if(route==="messages"||route==="messages-groupes")renderMessages();
   else if(route==="themes")renderThemes();
-  else if(route==="pro")renderPro();
+  else if(route==="boutique")renderPro();
   
   else renderGroups();
   drawArtCanvases();
@@ -2752,6 +2869,7 @@ document.addEventListener("click",function(e){
       var fo=$("#fx-opts");if(fo){fo.innerHTML=fxOptsHTML();var fb=$('[data-action="fx-toggle"][data-k="'+fk+'"]');if(fb)fb.focus({preventScroll:true});}
       toast((fk==="touch"?"Effets au toucher":(fk==="menu"?"Personnage du menu":(fk==="notif"?"Notifications de messages":"Fond animé")))+" : "+(state.fx[fk]?"activé":"désactivé"));break;}
     case "goto-profile":go("profil");break;
+    case "xp-invite":(function(){var u=xpInviteLink();var done=function(){toast("Lien copié ! Colle-le à tes potes (+200 XP quand ils s'inscrivent).");};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(done,function(){window.prompt("Copie ce lien et envoie-le :",u);});}else{window.prompt("Copie ce lien et envoie-le :",u);}})();break;
     case "buy":openBuy(el.dataset.kind,id,el);break;
     case "buy-close":closeBuy();break;
     case "buy-confirm":confirmBuy();break;
@@ -2927,6 +3045,7 @@ document.addEventListener("submit",function(e){
         state.threads[tp.id].push({from:"me",text:text,t:Date.now()});
         save();
         if(route==="messages"&&kindOf()===k&&active[k]===tp.id){renderThreadList();renderThread();}
+        try{xpAward("dm",5,25);}catch(e){}
         inp.focus();
       });
       return;
@@ -3087,6 +3206,7 @@ function loadAccountStuff(){
     }
     acct.row=res.data;
     if(acct.row){
+      try{xpApplyOwnedFromRow(acct.row);}catch(e){}
       if(!state.me.pseudo.trim())state.me.pseudo=acct.row.pseudo||"";
       if(!state.me.bio.trim())state.me.bio=acct.row.bio||"";
       if(!state.me.veut.trim())state.me.veut=acct.row.veut||"";
@@ -3102,6 +3222,7 @@ function loadAccountStuff(){
     loadMessagesOnce();
     subscribeRealtime();
     if(!acct.rpTimer)acct.rpTimer=setInterval(function(){refreshRealProfiles();if(acct.user&&sb)loadMessagesOnce();},20000);
+    try{xpStartEngine();}catch(e){}
   });
 }
 function refreshRealProfiles(){
@@ -3175,7 +3296,7 @@ function syncProfileRow(){
   var linkClips=m.clips.filter(function(c){return c.kind==="link"&&safeUrl(c.url);}).slice(0,6)
     .map(function(c){return {title:String(c.title||"Clip").slice(0,60),url:c.url};});
   var row={pseudo:(m.pseudo.trim()||"Joueur").slice(0,24),age:String(m.age||""),bio:m.bio||"",veut:m.veut||"",games:m.games||[],cherche:m.cherche||[],photo:(m.photo||"").slice(0,399999),online:true,clips:linkClips};
-  var finish=function(rw){rw.id=acct.user.id;acct.row=rw;REALBY[acct.user.id]=realFromRow(rw);renderAccountMenu();};
+  var finish=function(rw){rw.id=acct.user.id;acct.row=rw;REALBY[acct.user.id]=realFromRow(rw);renderAccountMenu();if(m.pseudo.trim()&&m.bio.trim()&&m.games.length&&m.photo)xpAward("profil",50,-1,"+50 XP : profil complet !");};
   var fail=function(res){toast("Enregistrement du profil impossible : "+String(res&&res.error&&res.error.message||"erreur").slice(0,70));};
   sb.from("profiles").update(row).eq("id",acct.user.id).then(function(res){
     if(res.error&&/clips/i.test(String(res.error.message||""))){
@@ -3230,6 +3351,8 @@ function authSubmit(){
   if(authModeSignup){
     if(pseudo.length<2)return bad("Choisis un pseudo de 2 caractères minimum.");
     var meta={pseudo:pseudo,age:String(state.me.age||""),bio:state.me.bio||"",veut:state.me.veut||"",games:state.me.games||[],cherche:state.me.cherche||[],photo:state.me.photo||""};
+    var ref=null;try{ref=localStorage.getItem("findmymate.ref")||null;}catch(e){}
+    if(ref)meta.ref=String(ref).slice(0,64);
     sb.auth.signUp({email:email,password:pass},{data:meta}).then(function(res){
       if(res.error){
         if(/already registered/i.test(String(res.error.message||res.error))){
@@ -3244,6 +3367,7 @@ function authSubmit(){
       }
       if(!res.data.session){err.textContent="Compte créé ! Vérifie ta boîte mail et clique le lien de confirmation.";err.hidden=false;return;}
       try{localStorage.setItem("findmymate.email",email);}catch(e){}
+      if(ref){try{sb.rpc("award_referral",{p_ref:ref});}catch(e){}}
       closeAuth();toast("Bienvenue "+pseudo+" !");
     });
   }else{
@@ -3263,10 +3387,12 @@ function signOutFlow(){
 function renderAccountMenu(){
   var t=$("#mi-account-title"),d=$("#mi-account-desc");
   if(!t)return;
-  if(acct.user){t.textContent=signoutAsk?"Confirmer la déconnexion":"Déconnexion";d.textContent=signoutAsk?"Appuie encore pour te déconnecter":"Connecté : "+(acct.row&&acct.row.pseudo?acct.row.pseudo:((acct.user.user_metadata&&acct.user.user_metadata.pseudo)||"ton compte"));}
+  if(acct.user){t.textContent=signoutAsk?"Confirmer la déconnexion":"Déconnexion";d.textContent=signoutAsk?"Appuie encore pour te déconnecter":"Connecté : "+(acct.row&&acct.row.pseudo?acct.row.pseudo:((acct.user.user_metadata&&acct.user.user_metadata.pseudo)||"ton compte"))+" · "+acctXp()+" XP";}
   else{t.textContent="Se connecter";d.textContent="Crée un compte gratuit pour écrire aux joueurs inscrits";}
 }
 
+try{var _qs=new URLSearchParams(location.search);var _rq=_qs.get("ref");if(_rq&&_qlooksRef(_rq)){try{localStorage.setItem("findmymate.ref",_rq);}catch(e){}}}catch(e){}
+function _qlooksRef(x){return typeof x==="string"&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(x);}
 try{Art.setStill(!state.fx.bg);}catch(e){}
 try{setFavicon();}catch(e){}
 applyTheme(state.theme);
