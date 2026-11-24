@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Politique de confidentialité · FindMyMate</title>
-<meta name="description" content="Quelles données FindMyMate utilise dans sa version de démonstration.">
+<meta name="description" content="Quelles données FindMyMate utilise et comment elles sont protégées.">
 <meta name="theme-color" content="#d4a21f">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -20,35 +20,43 @@
 </div></header>
 <main>
 <h1>Politique de confidentialité</h1>
-<p class="maj">Dernière mise à jour : 22 novembre 2026</p>
-<div class="demo"><p><strong>Version de démonstration.</strong> FindMyMate fonctionne pour l'instant sans serveur : tout reste dans ton navigateur, les joueurs sont des exemples et les achats sont fictifs.</p></div>
+<p class="maj">Dernière mise à jour : 24 novembre 2026</p>
 
 <h2>En bref</h2>
 <ul>
-<li>FindMyMate n'a <strong>pas de compte</strong> et son éditeur ne reçoit <strong>aucune donnée</strong> que tu saisis dans le site (profil, messages, clips, achats fictifs).</li>
-<li>Tout est enregistré <strong>dans ton navigateur</strong>, sur ton appareil.</li>
+<li>Créer un compte est gratuit. Il sert à montrer ton profil aux autres joueurs et à recevoir tes messages privés.</li>
+<li>Tes messages privés (texte et photos) ne sont visibles que par toi et par la personne à qui tu écris.</li>
 <li>Ce site ne contient ni publicité, ni statistiques de fréquentation, ni outil de suivi.</li>
 </ul>
+<h2>Les données qui vont sur le serveur</h2>
+<p>Quand tu crées un compte, ces données sont enregistrées sur le serveur sécurisé <strong>Supabase</strong> (base de données dont le projet est hébergé dans l'Union européenne, en Irlande) :</p>
+<table>
+<tr><th>Données</th><th>Pourquoi</th></tr>
+<tr><td>Ton e-mail et ton mot de passe (le mot de passe est chiffré, personne ne peut le lire, même pas nous)</td><td>Te connecter au site</td></tr>
+<tr><td>Ton profil : pseudo, âge, biographie, jeux, rang, photo, statut en ligne, clips par lien</td><td>Le montrer aux autres joueurs dans la recherche</td></tr>
+<tr><td>Tes messages privés : texte et photos du tchat</td><td>Les envoyer aux joueurs à qui tu écris</td></tr>
+</table>
+<p>Seuls tes messages privés avec la bonne personne sont accessibles : personne d'autre ne peut les lire.</p>
 <h2>Ce qui reste sur ton appareil</h2>
 <table>
 <tr><th>Données</th><th>Où</th></tr>
-<tr><td>Pseudo, âge, biographie, jeux, rang, thème, réglages, messages, groupes, achats fictifs</td><td>Stockage local du navigateur (<code>localStorage</code>)</td></tr>
-<tr><td>Photo de profil, photos, vidéos et messages vocaux que tu ajoutes</td><td>Base locale du navigateur (<code>IndexedDB</code>)</td></tr>
+<tr><td>Ton thème, tes réglages, tes conversations enregistrées localement, tes achats fictifs</td><td>Stockage local du navigateur (<code>localStorage</code>)</td></tr>
+<tr><td>Ta photo de profil et tes animations</td><td>Base locale du navigateur (<code>IndexedDB</code>)</td></tr>
 </table>
-<p>Le <strong>micro</strong> n'est demandé que si tu enregistres un message vocal ou ouvres la « voc ». Le son est traité sur ton appareil et n'est envoyé nulle part. Les <strong>notifications</strong> sont affichées par ton appareil et ne passent par aucun serveur.</p>
-<h2>Ce qui sort quand même de ton appareil</h2>
+<h2>Les services utilisés</h2>
 <ul>
-<li><strong>Hébergeur du site</strong> (<span class="ph">[nom de l'hébergeur]</span>) : comme tout site, il peut garder des journaux techniques (adresse IP, date, page demandée) pour la sécurité et le bon fonctionnement.</li>
+<li><strong>Supabase</strong> : garde les comptes, profils et messages privés. Serveur situé dans l'Union européenne.</li>
+<li><strong>GitHub Pages</strong> : héberge le site. Comme tout site, il peut garder des journaux techniques (adresse IP, date, page demandée) pour la sécurité et le bon fonctionnement.</li>
 <li><strong>Polices Google</strong> : pour afficher le texte, ton navigateur télécharge les polices « Chakra Petch » et « Figtree » depuis les serveurs de Google, qui reçoivent donc ton adresse IP. Rien d'autre n'est envoyé à Google par ce site.</li>
 </ul>
 <h2>Responsable et contact</h2>
-<p>Responsable : <span class="ph">[TON NOM]</span>, contact : <span class="ph">[ton adresse email]</span>.</p>
+<p>Responsable : Hugo, contact : <a href="mailto:hugofindyoumate@gmail.com">hugofindyoumate@gmail.com</a>.</p>
 <h2>Tes droits</h2>
-<p>Comme l'éditeur ne garde aucune donnée sur toi, tu peux tout supprimer toi-même en effaçant les données du site dans ton navigateur (voir <a href="cookies.html">cookies et stockage</a>). Pour les journaux de l'hébergeur ou toute autre question, écris à <span class="ph">[ton adresse email]</span> : accès, correction, suppression, opposition. Tu peux aussi saisir la CNIL (<a href="https://www.cnil.fr">cnil.fr</a>).</p>
+<p>Tu peux changer ou effacer tes infos depuis ton profil sur le site. Tu peux aussi nous écrire à <a href="mailto:hugofindyoumate@gmail.com">hugofindyoumate@gmail.com</a> pour : te faire envoyer tes données, les corriger, ou <strong>supprimer totalement ton compte et tes messages</strong> — nous nous en occupons. Tu peux aussi saisir la CNIL (<a href="https://www.cnil.fr">cnil.fr</a>).</p>
 <h2>Enfants</h2>
-<p>Le site ne collecte aucune donnée personnelle sur un serveur. Les parents sont invités à accompagner leurs enfants dans l'usage du site.</p>
+<p>Pour créer un compte, demande l'accord de tes parents si tu as moins de 15 ans. Ne mets jamais d'informations privées dans ton profil (adresse, numéro de téléphone, école) : tout le site est public.</p>
 <h2>Changements</h2>
-<p>Quand de vrais comptes seront ouverts, cette page sera remplacée par une politique complète (données, prestataires, durées, droits) et tu seras prévenu.</p>
+<p>Si cette politique change (par exemple ajout de paiements réels), la date en haut de la page changera et les nouveautés seront indiquées ici.</p>
 
 <nav class="nav" aria-label="Pages légales"><a href="conditions.html">Conditions d'utilisation</a> · <a href="confidentialite.html">Confidentialité</a> · <a href="cookies.html">Cookies et stockage</a> · <a href="mentions-legales.html">Mentions légales</a></nav>
 </main>

@@ -22,3 +22,5 @@ th,td{border:1px solid var(--ligne);padding:.55rem .7rem;text-align:left;vertica
 code{background:var(--surface-2);padding:.05rem .35rem;border-radius:6px;font-size:.9em}
 .ph{background:#ffe9a8;padding:0 .25rem;border-radius:4px}
 .nav{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--ligne);font-size:.92rem}
+
+address{font-style:normal;margin:.5rem 0 0}
