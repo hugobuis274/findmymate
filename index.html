@@ -680,7 +680,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v21</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v22</p>
   </form>
 </div>
 
@@ -1672,8 +1672,9 @@ function parseHash(){var h=(location.hash||"").slice(1);if(h==="messages-groupes
 var route=parseHash()||"accueil";
 
 function setSub(open){
-  $("#menu-group").classList.toggle("open",open);
-  $("#mi-messages").setAttribute("aria-expanded",String(open));
+  var g=$("#menu-group"),mm=$("#mi-messages");
+  if(g)g.classList.toggle("open",open);
+  if(mm)mm.setAttribute("aria-expanded",String(open));
 }
 function setMenu(open,opts){
   menuOpen=open;
@@ -1683,7 +1684,7 @@ function setMenu(open,opts){
   try{MenuFx.toggle(open);}catch(e){}
   if(open){
     menuSeen=true;b.classList.remove("pulse");
-    if(route==="messages"||route==="messages-groupes")setSub(true);
+    if(route==="messages")setSub(true);
     var first=p.querySelector('[aria-current="page"]')||p.querySelector("a");
     if(first)first.focus({preventScroll:true});
   }else{
@@ -1788,7 +1789,7 @@ function updateChrome(){
     if(a.dataset.page===cur)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");
   });
   var par=$("#mi-messages");
-  if(route==="messages"||route==="messages-groupes")par.setAttribute("aria-current","true");else par.removeAttribute("aria-current");
+  if(par){if(route==="messages")par.setAttribute("aria-current","true");else par.removeAttribute("aria-current");}
   $("#menu-btn").classList.toggle("pulse",route==="accueil"&&!menuSeen&&!menuOpen);
   updateBadges();
 }
@@ -2758,7 +2759,6 @@ document.addEventListener("click",function(e){
     case "notif-open":notifOpen();break;
     case "notif-close":notifHide();break;
     case "notif-perm":notifPerm();break;
-    case "submenu-toggle":setSub(!$("#menu-group").classList.contains("open"));break;
     case "toggle-panel":panelOpen=!panelOpen;updateSearch();break;
     case "f-game":f.game=(f.game===v)?"":v;f.ranks.clear();updateSearch();break;
     case "f-rank":if(f.ranks.has(v))f.ranks.delete(v);else f.ranks.add(v);updateSearch();break;
