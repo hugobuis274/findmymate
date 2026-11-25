@@ -699,7 +699,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v28</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v29</p>
   </form>
 </div>
 
@@ -3345,7 +3345,7 @@ function authSetMode(keepPending){
 function prettyAuthErr(e){
   var m=String((e&&e.message)||e);
   if(/already registered/i.test(m))return "Ce compte existe déjà. Essaie « Me connecter ».";
-  if(/invalid login credentials/i.test(m))return "E-mail ou mot de passe incorrect.";
+  if(/invalid login credentials/i.test(m))return "E-mail ou mot de passe incorrect. Pas encore de compte ? Appuie en bas sur « Pas encore de compte ? Créer un compte ».";
   if(/email not confirmed/i.test(m))return "Ton compte n'est pas encore activé. Recommence « Créer un compte » avec le même e-mail : un nouveau code te sera envoyé.";
   if(/anonymous|rate|too many|attempts/i.test(m))return "Trop d'essais. Attends une minute et réessaie.";
   if(/database error/i.test(m))return "Impossible pour l'instant. Réessaie dans un instant.";
