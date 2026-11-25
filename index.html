@@ -686,6 +686,11 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <input id="auth-pass" type="password" maxlength="72" autocomplete="current-password" style="padding-right:5.5rem">
       <button type="button" class="linklike" id="auth-eye" data-action="auth-eye" style="align-self:flex-start">Afficher le mot de passe</button>
     </div>
+    <div class="field" id="auth-code-field" hidden>
+      <label for="auth-code">Code reçu par e-mail (6 chiffres)</label>
+      <input id="auth-code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Ex. 481902">
+      <button type="button" class="linklike" data-action="auth-resend" style="align-self:flex-start">Tu n'as rien reçu ? Renvoyer le code</button>
+    </div>
     <p class="err" id="auth-err" role="alert" hidden></p>
     <button type="button" class="switchlink" id="auth-switch-login" data-action="auth-mode">Tu as déjà un compte ? Me connecter</button>
     <button type="button" class="switchlink" id="auth-switch-signup" data-action="auth-mode" hidden>Pas encore de compte ? Créer un compte</button>
@@ -694,7 +699,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v27</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v28</p>
   </form>
 </div>
 
@@ -3309,10 +3314,12 @@ function syncProfileRow(){
   });
 }
 var authModeSignup=true;
+var authPending=null;/* inscription en attente du code reçu par e-mail */
 var PROFCOUNT=null;
 var signoutAsk=false,signoutT=0;
 function openAuth(signup){
   authModeSignup=signup===true;
+  authPending=null;
   authSetMode();
   var pe=$("#auth-pseudo");
   if(!pe.value&&state.me.pseudo.trim())pe.value=state.me.pseudo.trim();
@@ -3323,21 +3330,23 @@ function openAuth(signup){
   $(authModeSignup?"#auth-pseudo":"#auth-email").focus();
 }
 function closeAuth(){$("#auth").hidden=true;}
-function authSetMode(){
-  var s=authModeSignup;
-  $("#auth-title").textContent=s?"Créer ton compte":"Me connecter";
-  $("#auth-ok").textContent=s?"Créer mon compte":"Se connecter";
-  $("#auth-sub").textContent=s?"Gratuit. Pseudo, e-mail, mot de passe.":"Ton e-mail et ton mot de passe.";
-  $("#auth-pseudo-field").hidden=!s;
+function authSetMode(keepPending){
+  var p=keepPending&&authPending?authPending:null;
+  var s=!p&&authModeSignup;
+  $("#auth-title").textContent=p?"Vérifie ta boîte mail":(s?"Créer ton compte":"Me connecter");
+  $("#auth-ok").textContent=p?"Valider le code":(s?"Créer mon compte":"Se connecter");
+  $("#auth-sub").textContent=p?("Un code à 6 chiffres vient de partir à "+p.email+"."):(s?"Gratuit. Pseudo, e-mail, mot de passe.":"Ton e-mail et ton mot de passe.");
+  $("#auth-pseudo-field").hidden=p?true:!s;
+  $("#auth-code-field").hidden=!p;
   var bl=$("#auth-switch-login"),bs=$("#auth-switch-signup");
-  if(bl)bl.hidden=!s;
-  if(bs)bs.hidden=!!s;
+  if(bl)bl.hidden=p?true:!s;
+  if(bs)bs.hidden=p?true:!!s;
 }
 function prettyAuthErr(e){
   var m=String((e&&e.message)||e);
   if(/already registered/i.test(m))return "Ce compte existe déjà. Essaie « Me connecter ».";
   if(/invalid login credentials/i.test(m))return "E-mail ou mot de passe incorrect.";
-  if(/email not confirmed/i.test(m))return "Vérifie ta boîte mail : clique le lien de confirmation, puis connecte-toi.";
+  if(/email not confirmed/i.test(m))return "Ton compte n'est pas encore activé. Recommence « Créer un compte » avec le même e-mail : un nouveau code te sera envoyé.";
   if(/anonymous|rate|too many|attempts/i.test(m))return "Trop d'essais. Attends une minute et réessaie.";
   if(/database error/i.test(m))return "Impossible pour l'instant. Réessaie dans un instant.";
   return m;
@@ -3346,6 +3355,25 @@ function authSubmit(){
   var pseudo=($("#auth-pseudo").value||"").trim(),email=$("#auth-email").value.trim(),pass=$("#auth-pass").value,err=$("#auth-err");
   function bad(m){err.textContent=m;err.hidden=false;}
   if(!email||email.indexOf("@")<1)return bad("Mets une adresse e-mail valide.");
+  if(authPending){
+    var code=($("#auth-code").value||"").replace(/\D/g,"");
+    if(code.length!==6)return bad("Le code contient 6 chiffres. Regarde ta boîte mail.");
+    err.hidden=true;
+    sb.auth.verifyOtp({email:authPending.email,token:code,type:"signup"}).then(function(res){
+      if(res.error){
+        var m=String(res.error.message||res.error);
+        if(/expired/i.test(m))return bad("Ce code a expiré. Appuie sur « Renvoyer le code », puis réessaie.");
+        if(/invalid|token|otp/i.test(m))return bad("Ce code n'est pas le bon. Vérifie les 6 chiffres, ou renvoie un nouveau code.");
+        return bad(prettyAuthErr(res.error));
+      }
+      var rf=authPending.ref;var ml=authPending.email;
+      authPending=null;authSetMode();err.hidden=true;
+      try{localStorage.setItem("findmymate.email",ml);}catch(e){}
+      if(rf){try{sb.rpc("award_referral",{p_ref:rf});}catch(e){}}
+      closeAuth();toast("Compte activé, bienvenue !");
+    });
+    return;
+  }
   if(!pass||pass.length<6)return bad("Le mot de passe doit faire au moins 6 caractères.");
   err.hidden=true;
   if(authModeSignup){
@@ -3365,7 +3393,14 @@ function authSubmit(){
         }
         return bad(prettyAuthErr(res.error));
       }
-      if(!res.data.session){err.textContent="Compte créé ! Vérifie ta boîte mail et clique le lien de confirmation.";err.hidden=false;return;}
+      if(!res.data.session){
+        authPending={email:email,ref:ref};
+        $("#auth-email").value=email;$("#auth-pass").value="";$("#auth-code").value="";
+        err.hidden=true;authSetMode(true);
+        try{$("#auth-code").focus();}catch(e){}
+        toast("Un code à 6 chiffres part vers "+email+".");
+        return;
+      }
       try{localStorage.setItem("findmymate.email",email);}catch(e){}
       if(ref){try{sb.rpc("award_referral",{p_ref:ref});}catch(e){}}
       closeAuth();toast("Bienvenue "+pseudo+" !");
@@ -3399,7 +3434,19 @@ applyTheme(state.theme);
 render();
 sbInit();
 try{$("#auth-form").addEventListener("submit",function(e){e.preventDefault();authSubmit();});}catch(e){}
-try{$("#auth-form").addEventListener("click",function(e){var el=e.target.closest("[data-action='auth-mode']");if(el){authSetMode(!authModeSignup);toast(authModeSignup?"Mode création de compte":"Mode connexion : ton e-mail puis ton mot de passe");}});}catch(e){}
+try{$("#auth-form").addEventListener("click",function(e){
+  var el=e.target.closest("[data-action='auth-mode']");
+  if(el){authSetMode(!authModeSignup);toast(authModeSignup?"Mode création de compte":"Mode connexion : ton e-mail puis ton mot de passe");return;}
+  var rv=e.target.closest("[data-action='auth-resend']");
+  if(rv&&authPending){
+    rv.disabled=true;
+    sb.auth.resend({type:"signup",email:authPending.email}).then(function(r){
+      rv.disabled=false;
+      if(r.error){toast("Impossible de renvoyer pour l'instant. Attends une minute puis réessaie.");}
+      else{toast("Nouveau code envoyé à "+authPending.email+".");}
+    });
+  }
+});}catch(e){}
 })();
 </script>
 
