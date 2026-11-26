@@ -709,7 +709,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v36</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v37</p>
   </form>
 </div>
 
@@ -3338,14 +3338,21 @@ function syncProfileRow(){
   var row={pseudo:(m.pseudo.trim()||"Joueur").slice(0,24),age:String(m.age||""),bio:m.bio||"",veut:m.veut||"",games:m.games||[],cherche:m.cherche||[],photo:(m.photo||"").slice(0,399999),online:true,clips:linkClips};
   var finish=function(rw){rw.id=acct.user.id;acct.row=rw;REALBY[acct.user.id]=realFromRow(rw);renderAccountMenu();if(m.pseudo.trim()&&m.bio.trim()&&m.games.length&&m.photo)xpAward("profil",50,-1,"+50 XP : profil complet !");};
   var fail=function(res){toast("Enregistrement du profil impossible : "+String(res&&res.error&&res.error.message||"erreur").slice(0,70));};
-  sb.from("profiles").update(row).eq("id",acct.user.id).then(function(res){
-    if(res.error&&/clips/i.test(String(res.error.message||""))){
-      var row2={};Object.keys(row).forEach(function(k){if(k!=="clips")row2[k]=row[k];});
-      sb.from("profiles").update(row2).eq("id",acct.user.id).then(function(res2){if(res2.error){fail(res2);return;}finish(row2);});
-      return;
-    }
-    if(res.error){fail(res);return;}
-    finish(row);
+  var doUpdate=function(){
+    sb.from("profiles").update(row).eq("id",acct.user.id).then(function(res){
+      if(res.error&&/clips/i.test(String(res.error.message||""))){
+        var row2={};Object.keys(row).forEach(function(k){if(k!=="clips")row2[k]=row[k];});
+        sb.from("profiles").update(row2).eq("id",acct.user.id).then(function(res2){if(res2.error){fail(res2);return;}finish(row2);});
+        return;
+      }
+      if(res.error){fail(res);return;}
+      finish(row);
+    });
+  };
+  /* deux comptes ne peuvent pas avoir le même pseudo */
+  sb.from("profiles").select("id").eq("pseudo",row.pseudo).neq("id",acct.user.id).limit(1).then(function(chk){
+    if(!chk.error&&chk.data&&chk.data.length){toast("Ce pseudo est déjà pris par un autre joueur. Choisis-en un autre.");return;}
+    doUpdate();
   });
 }
 var authModeSignup=true;
