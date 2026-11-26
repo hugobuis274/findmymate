@@ -709,7 +709,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v34</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v35</p>
   </form>
 </div>
 
@@ -1634,7 +1634,7 @@ function load(){
       var gthreads={};
       if(s.gthreads&&typeof s.gthreads==="object"){Object.keys(s.gthreads).forEach(function(k){if(Array.isArray(s.gthreads[k])&&s.gthreads[k].length)gthreads[k]=s.gthreads[k];});}
       return {me:me,threads:threads,unread:s.unread&&typeof s.unread==="object"?s.unread:{},
-        joined:strs(s.joined),requested:strs(s.requested),created:created,gthreads:gthreads,theme:(themeById(s.theme)&&(!themeById(s.theme).price||pro||owned.themes.indexOf(s.theme)>=0))?s.theme:"dore",owned:owned,pro:pro,fx:{touch:!(s.fx&&s.fx.touch===false),menu:!(s.fx&&s.fx.menu===false),bg:!(s.fx&&s.fx.bg===false),notif:!(s.fx&&s.fx.notif===false)}};
+        joined:strs(s.joined),requested:strs(s.requested),created:created,gthreads:gthreads,theme:(themeById(s.theme)&&!themeById(s.theme).price)?s.theme:"dore",owned:owned,pro:pro,fx:{touch:!(s.fx&&s.fx.touch===false),menu:!(s.fx&&s.fx.menu===false),bg:!(s.fx&&s.fx.bg===false),notif:!(s.fx&&s.fx.notif===false)}};
     }
   }catch(e){}
   return d;
