@@ -627,6 +627,14 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
 .xp-list{margin:0 0 1.2rem;padding-left:1.2rem;display:grid;gap:.3rem}
 .xp-invite{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;background:var(--surface-2);border:1px dashed var(--or-fonce);border-radius:12px;padding:.8rem 1rem;margin-bottom:1.2rem}
 .xp-invite p{margin:.1rem 0}
+.xp-chip{display:inline-flex;align-items:center;gap:.35rem;margin-left:auto;padding:.3rem .65rem;border-radius:999px;border:1px solid var(--or);color:var(--or);font-weight:700;font-size:.85rem;text-decoration:none;background:var(--surface-2);white-space:nowrap}
+.xp-chip svg{display:block}
+.xp-home{background:var(--surface-2);border:1px solid var(--or-fonce);border-radius:14px;padding:1rem 1.1rem;margin:1.4rem 0 .2rem}
+.xp-home h2{margin:0 0 .4rem;font-size:1.15rem}
+.xp-home .xp-big{font-size:1.9rem;font-weight:800;color:var(--or)}
+.xp-home ul{margin:.5rem 0 0;padding-left:1.1rem}
+.xp-home li{margin:.2rem 0}
+.xp-home .xp-home-foot{margin:.7rem 0 0}
 .g-prev{position:relative;width:3.4rem;height:3.4rem;min-width:3.4rem;border-radius:10px;overflow:hidden;border:1px solid var(--ligne)}
 .g-prev canvas{position:absolute;inset:0;width:100%;height:100%}
 .buy-demo strong{color:var(--encre)}
@@ -641,6 +649,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <svg viewBox="0 0 64 64" width="36" height="36" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="16" fill="#07050b" stroke="var(--or)" stroke-width="2"/><g fill="var(--or)" fill-opacity=".5" stroke="var(--or)" stroke-width="1.4" stroke-linejoin="round"><path d="M14 13h10l11 20-5 3z"/><path d="M50 13H40L29 33l5 3z"/></g><g fill="none" stroke="var(--or)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="27" y="34" width="10" height="5" rx="1.2"/><circle cx="32" cy="47" r="11"/><circle cx="32" cy="47" r="4.6"/><path d="M32 39v4M32 51v4M24 47h4M36 47h4"/></g></svg>
       FindMyMate
     </a>
+    <a class="xp-chip" id="xp-chip" href="#boutique" data-route="boutique" data-page="boutique" hidden aria-label="Voir mes XP dans la boutique" title="Tes XP — appuie pour ouvrir la boutique"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 11-13h-7z" fill="currentColor"/></svg><span id="xp-chip-n">0 XP</span></a>
     <button type="button" class="menu-btn" id="menu-btn" data-action="menu-toggle" aria-expanded="false" aria-controls="menu-panel">
       <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
       <span>Menu</span>
@@ -690,7 +699,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <label for="auth-code">Code reçu par e-mail</label>
       <input id="auth-code" inputmode="numeric" maxlength="10" autocomplete="one-time-code" placeholder="Ex. 48190248">
       <button type="button" class="linklike" data-action="auth-resend" style="align-self:flex-start">Tu n'as rien reçu ? Renvoyer le code</button>
-      <p class="note" style="text-align:left;margin:.25rem 0 0">Pas de code dans le mail ? Ouvre le mail et appuie sur le lien ou le bouton de confirmation : ça activera ton compte tout seul.</p>
+      <p class="note" style="text-align:left;margin:.25rem 0 0">Pense aussi au dossier <strong>Spams</strong> de Gmail. Et si le mail contient un lien ou un bouton à la place du code, appuie dessus : ça activera ton compte tout seul.</p>
     </div>
     <p class="err" id="auth-err" role="alert" hidden></p>
     <button type="button" class="switchlink" id="auth-switch-login" data-action="auth-mode">Tu as déjà un compte ? Me connecter</button>
@@ -700,7 +709,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v33</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v34</p>
   </form>
 </div>
 
@@ -1839,6 +1848,24 @@ function renderHome(){
      +'<div><dt>Boutique</dt><dd>Gagne des XP en te connectant (20 min par jour), en invitant des potes et en complétant ton profil. Débloque les thèmes premium, les cadres de profil et le badge PRO.</dd></div>'
    +'</dl>'
    +'<p class="hint">Les profils ici sont des vrais comptes inscrits. Un compte est aussi demandé pour t\'écrire.</p>'
+   +'<div class="xp-home" id="xp-home">'
+     +(acct.user
+       ?'<h2>⚡ Tes XP</h2><div class="xp-big" id="xp-home-solde">'+acctXp()+' XP</div>'
+         +'<p class="note" id="xp-home-live">Gagne des XP en jouant : le compteur tourne pendant que tu es connecté.</p>'
+         +'<h3 style="margin:.9rem 0 .2rem;font-size:1rem">Comment gagner des XP</h3>'
+         +'<ul>'
+           +'<li>Créer ton compte : <strong>+50 XP</strong></li>'
+           +'<li>Profil complet (pseudo, bio, jeux, photo) : <strong>+50 XP</strong></li>'
+           +'<li>Jouer 20 minutes par jour : <strong>+10 XP</strong> par jour</li>'
+           +'<li>Série de 7 jours d\'affilee (20 min/jour) : <strong>+200 XP</strong> (ou une partie au prorata si tu rates un jour, dès 3 jours)</li>'
+           +'<li>Inviter un pote (son inscription avec ton lien) : <strong>+200 XP</strong></li>'
+           +'<li>Écrire à un nouveau joueur : <strong>+5 XP</strong>, 25 par jour max</li>'
+         +'</ul>'
+         +'<p class="xp-home-foot">Dépense tes XP dans la <a href="#boutique" data-route="boutique" data-page="boutique">Boutique</a> : thèmes (300), cadres (500), badge PRO (1000) ou Pack ULTIME (1890, −30 %).</p>'
+       :'<h2>⚡ Les XP</h2>'
+         +'<p class="note">Crée un compte et gagne des XP en jouant : 20 minutes par jour (+10), une série de 7 jours (+200), l\'invitation de potes (+200), le profil complet (+50).<br>Dépense-les dans la <a href="#boutique" data-route="boutique" data-page="boutique">Boutique</a>.</p>'
+         +'<p class="xp-home-foot"><button type="button" class="btn primary" data-action="account">Se connecter</button></p>')
+   +'</div>'
    +'</section>';
 }
 
@@ -2550,7 +2577,7 @@ var XPSTORE={days:{},runs:{},today:null};
 try{var _xps=JSON.parse(localStorage.getItem("findmymate.xp")||"{}");if(_xps&&typeof _xps==="object"){if(_xps.days)XPSTORE.days=_xps.days;if(_xps.runs)XPSTORE.runs=_xps.runs;if(_xps.today)XPSTORE.today=_xps.today;}}catch(e){}
 function xpSaveStore(){try{localStorage.setItem("findmymate.xp",JSON.stringify({days:XPSTORE.days,runs:XPSTORE.runs,today:XPSTORE.today}));}catch(e){}}
 function xpDayStr(d){function p2(n){return (n<10?"0":"")+n;}return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate());}
-function xpRefreshChrome(){renderAccountMenu();var el=$(".xp-big");if(el)el.textContent=acctXp()+" XP";}
+function xpRefreshChrome(){renderAccountMenu();var el=$(".xp-big");if(el)el.textContent=acctXp()+" XP";try{var ch=$("#xp-chip");if(ch){if(acct.user){ch.hidden=false;$("#xp-chip-n").textContent=acctXp()+" XP";}else{ch.hidden=true;}}}catch(e){}var hb=$("#xp-home-solde");if(hb)hb.textContent=acctXp()+" XP";}
 function xpAward(key,amount,cap,msg){
   if(!acct.user||!sb)return;
   sb.rpc("award_xp",{p_key:String(key||"").slice(0,60),p_amount:Math.max(1,Math.round(amount)),p_cap:cap}).then(function(r){
