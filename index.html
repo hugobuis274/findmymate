@@ -687,8 +687,8 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="linklike" id="auth-eye" data-action="auth-eye" style="align-self:flex-start">Masquer le mot de passe</button>
     </div>
     <div class="field" id="auth-code-field" hidden>
-      <label for="auth-code">Code reçu par e-mail (6 chiffres)</label>
-      <input id="auth-code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Ex. 481902">
+      <label for="auth-code">Code reçu par e-mail</label>
+      <input id="auth-code" inputmode="numeric" maxlength="10" autocomplete="one-time-code" placeholder="Ex. 48190248">
       <button type="button" class="linklike" data-action="auth-resend" style="align-self:flex-start">Tu n'as rien reçu ? Renvoyer le code</button>
       <p class="note" style="text-align:left;margin:.25rem 0 0">Pas de code dans le mail ? Ouvre le mail et appuie sur le lien ou le bouton de confirmation : ça activera ton compte tout seul.</p>
     </div>
@@ -700,7 +700,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v32</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v33</p>
   </form>
 </div>
 
@@ -3336,7 +3336,7 @@ function authSetMode(keepPending){
   var s=!p&&authModeSignup;
   $("#auth-title").textContent=p?"Vérifie ta boîte mail":(s?"Créer ton compte":"Me connecter");
   $("#auth-ok").textContent=p?"Valider le code":(s?"Créer mon compte":"Se connecter");
-  $("#auth-sub").textContent=p?("Un code à 6 chiffres vient de partir à "+p.email+"."):(s?"Gratuit. Pseudo, e-mail, mot de passe.":"Ton e-mail et ton mot de passe.");
+  $("#auth-sub").textContent=p?("Un code vient de partir à "+p.email+"."):(s?"Gratuit. Pseudo, e-mail, mot de passe.":"Ton e-mail et ton mot de passe.");
   $("#auth-pseudo-field").hidden=p?true:!s;
   $("#auth-code-field").hidden=!p;
   var bl=$("#auth-switch-login"),bs=$("#auth-switch-signup");
@@ -3358,7 +3358,7 @@ function authSubmit(){
   if(!email||email.indexOf("@")<1)return bad("Mets une adresse e-mail valide.");
   if(authPending){
     var code=($("#auth-code").value||"").replace(/\D/g,"");
-    if(code.length!==6)return bad("Le code contient 6 chiffres. Regarde ta boîte mail.");
+    if(code.length<4)return bad("Recopie bien le code reçu par e-mail.");
     err.hidden=true;
     sb.auth.verifyOtp({email:authPending.email,token:code,type:"signup"}).then(function(res){
       if(res.error){
