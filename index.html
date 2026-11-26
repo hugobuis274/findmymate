@@ -709,7 +709,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v37</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v38</p>
   </form>
 </div>
 
@@ -3216,21 +3216,47 @@ function sbInit(){
     acct.user=s?s.user:null;
     if(!acct.user&&route!=="accueil"){route="accueil";viewId=null;try{location.hash="accueil";}catch(e){}}
     renderAccountMenu();render();
-    if(acct.user)loadAccountStuff();
+    if(acct.user){resetAccountState();hydrateSignupMeta(acct.user);loadAccountStuff();}
   });
   sb.auth.onAuthStateChange(function(evt,sess){
     var u=sess&&sess.user?sess.user:null;
     var old=acct.user?acct.user.id:null;
     if((u?u.id:null)===(old?old:""))return;
     acct.user=u;acct.row=null;
-    if(u)loadAccountStuff();else onSignedOut(old);
+    resetAccountState();
+    if(u){hydrateSignupMeta(u);loadAccountStuff();}else onSignedOut(old);
     renderAccountMenu();
   });
+}
+/* changement de compte : on vide les données locales de l'ancien compte (profil, XP, achats, messages) */
+function resetAccountState(){
+  acct.xp=0;
+  var sys=state.threads&&state.threads.sys?state.threads.sys:[];
+  state.me={pseudo:"",age:"",bio:"",games:[],cherche:[],veut:"",clips:[],online:false,photo:"",deco:"",ptheme:""};
+  state.pro=false;state.owned={themes:[],decos:[]};
+  state.threads={sys:sys};state.unread={};
+  XPSTORE.days={};XPSTORE.runs={};XPSTORE.today=null;
+  try{xpSaveStore();}catch(e){}
+  save();
+}
+/* inscription : on récupère le profil tapé dans le formulaire (stocké dans user_metadata) */
+function hydrateSignupMeta(u){
+  try{
+    var md=(u&&u.user_metadata)||{};
+    if(md.pseudo)state.me.pseudo=String(md.pseudo).slice(0,24);
+    if(md.age!=null)state.me.age=String(md.age||"");
+    if(md.bio)state.me.bio=String(md.bio);
+    if(md.veut)state.me.veut=String(md.veut);
+    if(Array.isArray(md.games))state.me.games=md.games.filter(function(x){return x&&G[x.g]&&G[x.g].ranks.indexOf(x.r)>=0;});
+    if(Array.isArray(md.cherche))state.me.cherche=md.cherche.filter(function(c){return CHERCHE.indexOf(c)>=0;});
+    if(typeof md.photo==="string"&&md.photo.indexOf("data:image/")===0)state.me.photo=md.photo;
+  }catch(e){}
 }
 function onSignedOut(oldId){
   signoutAsk=false;clearTimeout(signoutT);
   if(acct.ch&&sb){try{sb.removeChannel(acct.ch);}catch(e){}}
   acct.ch=null;
+  if(acct.rpTimer){try{clearInterval(acct.rpTimer);}catch(e){}acct.rpTimer=null;}
   if(oldId)delete REALBY[oldId];
   save();updateBadges();
   if(route!=="accueil"){route="accueil";viewId=null;try{location.hash="accueil";}catch(e){}
