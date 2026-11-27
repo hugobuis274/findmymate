@@ -635,6 +635,16 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
 .xp-home ul{margin:.5rem 0 0;padding-left:1.1rem}
 .xp-home li{margin:.2rem 0}
 .xp-home .xp-home-foot{margin:.7rem 0 0}
+.xp-board{background:var(--surface-2);border:1px solid var(--or-fonce);border-radius:14px;padding:1rem 1.1rem;margin:1rem 0 .2rem}
+.xp-board h2{margin:0 0 .5rem;font-size:1.15rem}
+.xp-board ol{list-style:none;margin:0;padding:0}
+.xp-board li{display:flex;align-items:center;gap:.6rem;padding:.45rem .4rem;border-bottom:1px solid var(--ligne)}
+.xp-board li:last-child{border-bottom:none}
+.xp-board li.me{background:var(--surface);border-radius:10px;padding-left:.6rem;padding-right:.6rem}
+.xp-board .xr-rank{min-width:1.8rem;text-align:center;font-weight:700}
+.xp-board .xr-name{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xp-board .xr-xp{color:var(--or);font-weight:800;white-space:nowrap}
+.xp-board .note{margin:.6rem 0 0}
 .g-prev{position:relative;width:3.4rem;height:3.4rem;min-width:3.4rem;border-radius:10px;overflow:hidden;border:1px solid var(--ligne)}
 .g-prev canvas{position:absolute;inset:0;width:100%;height:100%}
 .buy-demo strong{color:var(--encre)}
@@ -709,7 +719,7 @@ html[data-theme="sakura"] .page-head h1,html[data-theme="sakura"] .page-head .su
       <button type="button" class="btn ghost" data-action="auth-close">Annuler</button>
       <button type="submit" class="btn primary" id="auth-ok">Créer mon compte</button>
     </div>
-    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v38</p>
+    <p class="note" id="auth-version" style="text-align:center;opacity:.6">fonction connexion v39</p>
   </form>
 </div>
 
@@ -1864,7 +1874,27 @@ function renderHome(){
          +'<p class="note">Crée un compte et gagne des XP en jouant : 20 minutes par jour (+10), une série de 7 jours (+200), l\'invitation de potes (+200), le profil complet (+50).<br>Dépense-les dans la <a href="#boutique" data-route="boutique" data-page="boutique">Boutique</a>.</p>'
          +'<p class="xp-home-foot"><button type="button" class="btn primary" data-action="account">Se connecter</button></p>')
    +'</div>'
+   +(acct.user?'<section class="xp-board" id="xp-board" hidden><h2>🏆 Classement des joueurs</h2><ol id="xp-board-list"></ol><p class="note">Les 10 joueurs avec le plus d\'XP. Gagne des XP en jouant pour grimper dans le classement !</p></section>':'')
    +'</section>';
+  if(acct.user)loadLeaderboard();
+}
+function loadLeaderboard(){
+  var box=$("#xp-board"),list=$("#xp-board-list");
+  if(!box||!list||!acct.user||!sb)return;
+  sb.from("profiles").select("id,pseudo,xp,xp_keys").order("xp",{ascending:false}).limit(10).then(function(r){
+    if(r.error)return;
+    var rows=(r.data||[]).filter(function(x){return x&&x.pseudo;});
+    if(!rows.length)return;
+    if(!$("#xp-board-list"))return;
+    box.hidden=false;
+    list.innerHTML=rows.map(function(p,i){
+      var kk=(p.xp_keys&&typeof p.xp_keys==="object")?p.xp_keys:{};
+      var pro=kk["item:pro"]===true||kk["item:pack"]===true;
+      var me=acct.user&&p.id===acct.user.id;
+      var rank=i<3?["\ud83e\udd47","\ud83e\udd48","\ud83e\udd49"][i]:String(i+1);
+      return '<li'+(me?' class="me"':'')+'><span class="xr-rank">'+rank+'</span><span class="xr-name">'+esc(p.pseudo)+(pro?' '+proBadge():'')+(me?' <span class="tag me">toi</span>':'')+'</span><span class="xr-xp">'+(typeof p.xp==="number"?p.xp:0)+' XP</span></li>';
+    }).join("");
+  });
 }
 
 /* ---------- vue : recherche ---------- */
